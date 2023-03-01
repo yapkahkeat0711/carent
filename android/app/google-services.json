@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "260916579186",
+    "firebase_url": "https://carent-e9bfe-default-rtdb.firebaseio.com",
+    "project_id": "carent-e9bfe",
+    "storage_bucket": "carent-e9bfe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:260916579186:android:4730792ff03ced8d40ebeb",
+        "android_client_info": {
+          "package_name": "com.carent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "260916579186-7k8q7g2jrof08qthff3u58tvaq3g4k6s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDe_gpBfux9fHYeRrFTjzqZXupG_rcMxT8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "260916579186-7k8q7g2jrof08qthff3u58tvaq3g4k6s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:260916579186:android:f2ec7afba7c7651840ebeb",
+        "android_client_info": {
+          "package_name": "com.reactnativeFirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "260916579186-7k8q7g2jrof08qthff3u58tvaq3g4k6s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDe_gpBfux9fHYeRrFTjzqZXupG_rcMxT8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "260916579186-7k8q7g2jrof08qthff3u58tvaq3g4k6s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
