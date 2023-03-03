@@ -64,32 +64,52 @@ import SignUp from "./Screens/Signup";
 import Home from "./Screens/Home";
 import Splash from "./Screens/Splash";
 
-import CustomerHome from "./Screens/CustomerHome";
+import CustomerHomeMap from "./Screens/CustomerHome";
+import CustomerHomeSelectDes from "./Screens/CustomerHomeSelectDes";
 import CustomerProfile from "./Screens/CustomerProfile";
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Stack = createStackNavigator ();
 const Tab = createBottomTabNavigator();
+
+function CustomerHomeStack(){
+  return(
+ 
+  <Stack.Navigator initialRouteName={'CustomerHomeMap'}>
+  <Stack.Screen
+     name="CustomerHomeMap"
+     component={CustomerHomeMap}
+     
+   ></Stack.Screen>
+   <Stack.Screen
+     name="CustomerHomeSelectDes"
+     component={CustomerHomeSelectDes}
+     
+   ></Stack.Screen>
+  
+ </Stack.Navigator>
+  );
+}
 function CustomerBottomTab(){
   return(
  
-           <Tab.Navigator initialRouteName={'customerHome'} 
+           <Tab.Navigator initialRouteName={'customerHomeStack'} 
            screenOptions={({ route }) => ({
-            tabBarIcon: ({ color, size }) => {
-              let iconName='people';
+            tabBarIcon: ({ focused,color, size }) => {
+              let iconName;
     
-              if (route.name === 'customerHome') {
-                iconName = 'people';
+              if (route.name === 'customerHomeStack') {
+                iconName = focused ? 'home' : 'home-outline';
               } else if (route.name === 'customerProfile') {
-                iconName = 'people';
+                iconName = focused ? 'person-circle' : 'person-circle-outline';
               }
     
               return <Ionicons name={iconName} size={size} color={color} />;
             },
     })}
     >
-            <Tab.Screen name="customerHome" component={CustomerHome}  />
+            <Tab.Screen name="customerHomeStack" component={CustomerHomeStack}  />
           
             <Tab.Screen name="customerProfile" component={CustomerProfile} />
         
