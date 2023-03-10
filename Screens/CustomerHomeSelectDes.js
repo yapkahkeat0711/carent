@@ -29,15 +29,31 @@ const CustomerHomeSelectDes = ({ route,navigation }) => {
   const fetchDestinationCords = (lat, lng, zipCode, cityText) => {
     console.log("zip code==>>>",zipCode)
     console.log('city texts',cityText)
-    console.log('city texts',customerPosition)
+    
     setDestination({
       latitude: lat,
-      longitude: lng
+      longitude: lng,
+      latitudeDelta: LATITUDE_DELTA,
+      longitudeDelta: LONGITUDE_DELTA
     });
+    
    
 }
+const checkValid = () =>{
+  if(Destination.latitude===0){
+      alert('Please enter your exact destination location')
+      return false
+  }
+  return true
+}
+
 const onDone = () => {
-  
+  const isValid = checkValid()
+  if(isValid){
+    console.log('city texts',customerPosition)
+    console.log('city texts',Destination)
+    navigation.navigate('CustomerCheckFee',{customerPosition: customerPosition,destination:Destination})
+  }
 }
   return(
     <View style={styles.container}>

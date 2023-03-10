@@ -67,6 +67,7 @@ import Splash from "./Screens/Splash";
 import CustomerHomeMap from "./Screens/CustomerHome";
 import CustomerHomeSelectDes from "./Screens/CustomerHomeSelectDes";
 import CustomerProfile from "./Screens/CustomerProfile";
+import CustomerCheckFee from "./Screens/CustomerCheckFee";
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -87,7 +88,11 @@ function CustomerHomeStack(){
      component={CustomerHomeSelectDes}
      
    ></Stack.Screen>
-  
+   <Stack.Screen
+     name="CustomerCheckFee"
+     component={CustomerCheckFee}
+     
+   ></Stack.Screen>
  </Stack.Navigator>
   );
 }
