@@ -14,7 +14,7 @@ import {
 
 import auth from "@react-native-firebase/auth";
 
-const CustomerProfile = ({ navigation }) => {
+const WaitingPickup = ({ navigation }) => {
   const [user, setUser] = useState();
 
   useEffect(() => {
@@ -96,11 +96,11 @@ const CustomerProfile = ({ navigation }) => {
             style={styles.buttonStyle}
             activeOpacity={0.5}
             onPress={() =>
-                navigation.navigate("Home")
+                navigation.navigate("Customer")
               }
           >
             <Text style={styles.buttonTextStyle}>
-              To Home View
+              To Customer View
             </Text>
           </TouchableOpacity>
         </View>
@@ -127,7 +127,7 @@ const CustomerProfile = ({ navigation }) => {
   );
 };
 
-export default CustomerProfile;
+export default WaitingPickup;
 
 const styles = StyleSheet.create({
   buttonStyle: {

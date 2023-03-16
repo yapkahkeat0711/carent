@@ -68,6 +68,9 @@ import CustomerHomeMap from "./Screens/CustomerHome";
 import CustomerHomeSelectDes from "./Screens/CustomerHomeSelectDes";
 import CustomerProfile from "./Screens/CustomerProfile";
 import CustomerCheckFee from "./Screens/CustomerCheckFee";
+import SendCarRequest from "./Screens/SendCarRequest";
+import WaitingPickup from "./Screens/WaitingPickup";
+
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -92,6 +95,18 @@ function CustomerHomeStack(){
      name="CustomerCheckFee"
      component={CustomerCheckFee}
      
+   ></Stack.Screen>
+   <Stack.Screen
+     name="SendCarRequest"
+     component={SendCarRequest}
+     
+   ></Stack.Screen>
+   <Stack.Screen
+     name="WaitingPickup"
+     component={WaitingPickup}
+     options={{
+      headerLeft: () => <></>,
+    }}
    ></Stack.Screen>
  </Stack.Navigator>
   );
