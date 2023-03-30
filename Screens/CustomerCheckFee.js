@@ -39,6 +39,7 @@ const CustomerCheckFee = ({ route,navigation }) => {
           {calinfo.distance !== 0 && calinfo.time !== 0 && (<View style={{ alignItems: 'center', marginVertical: 16 }}>
                 <Text>Time Needed : {calinfo.time.toFixed(0)} mins</Text>
                 <Text>Distance : {calinfo.distance.toFixed(0)} KM</Text>
+                <Text>Price : RM{(calinfo.distance * 0.25).toFixed(2)}</Text>
             </View>)}
         
         <View style={styles.mapcontainer}>

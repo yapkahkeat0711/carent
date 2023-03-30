@@ -2,7 +2,8 @@
 // https://aboutreact.com/react-native-firebase-authentication/
 
 // Import React and Component
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
+import { Root, Popup } from 'react-native-popup-confirm-toast'
 import {
   View,
   Text,
@@ -10,126 +11,150 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  Button,
+  
 } from "react-native";
+import Modal from "react-native-modal";
 
-import auth from "@react-native-firebase/auth";
+import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth'; 
 
 const WaitingPickup = ({ navigation }) => {
-  const [user, setUser] = useState();
-
+  
+  const [modalVisible,setmodalVisible]= useState(false);
+  const btnRef = useRef();
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged((user) => {
-      console.log("user", JSON.stringify(user));
-      setUser(user);
+      
+    WaitingDriverReach();
+   
+  }, [])
+
+  //when driver click arrived it will change the request and create popup for user
+  function WaitingDriverReach(){
+    //only one request for a user in the same time
+    const ridesRef = database().ref('rides').orderByChild("passenger/email").equalTo(auth().currentUser.email).limitToFirst(1);
+    ridesRef.off("value");
+    
+    ridesRef.on("value", (snapshot) => {
+      //put each value into firstRef
+      snapshot.forEach(function(item) {
+        var request = item.val();
+
+        //check whether driver is arrived
+        if(request.status==="arrived"){
+          console.log("arrived");
+          btnRef.current.props.onPress();
+            
+          
+        //check whether ride is done
+        }else if(request.status==="done"){
+          console.log("ride done");
+          setmodalVisible(!modalVisible);
+        }
+      });
+
     });
-
-    return subscriber;
-  }, []);
-
-  const logout = () => {
-    Alert.alert(
-      "Logout",
-      "Are you sure? You want to logout?",
-      [
-        {
-          text: "Cancel",
-          onPress: () => {
-            return null;
-          },
-        },
-        {
-          text: "Confirm",
-          onPress: () => {
-            auth()
-              .signOut()
-              .then(() => navigation.replace("Login"))
-              .catch((error) => {
-                console.log(error);
-                if (error.code === "auth/no-current-user")
-                  navigation.replace("Login");
-                else alert(error);
-              });
-          },
-        },
-      ],
-      { cancelable: false }
-    );
-  };
+    
+    
+  }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ flex: 1, padding: 16 }}>
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 20,
-              textAlign: "center",
-              marginBottom: 16,
-            }}
-          >
-            Firebase Auth
-          </Text>
-          {user ? (
-            <Text>
-              Welcome{" "}
-              {user.displayName
-                ? user.displayName
-                : user.email}
-            </Text>
-          ) : null}
-          <TouchableOpacity
-            style={styles.buttonStyle}
-            activeOpacity={0.5}
-            onPress={logout}
-          >
-            <Text style={styles.buttonTextStyle}>
-              Logout
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.buttonStyle}
-            activeOpacity={0.5}
+    <View>
+      <Text>Waiting Driver to Pickup ...</Text>
+  {/* arrived popup    */}
+  <Root>
+    <View style={{ display: "none" }}>
+        <Button 
+            title="Click Me"
+            ref={btnRef}
             onPress={() =>
-                navigation.navigate("Customer")
-              }
-          >
-            <Text style={styles.buttonTextStyle}>
-              To Customer View
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <Text
-          style={{
-            fontSize: 18,
-            textAlign: "center",
-            color: "grey",
-          }}
-        >
-          React Native Firebase Authentication
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            textAlign: "center",
-            color: "grey",
-          }}
-        >
-          www.aboutreact.com
-        </Text>
-      </View>
-    </SafeAreaView>
-  );
+               
+                Popup.show({
+                    type: 'success',
+                    textBody: 'Driver is arrived !!!',
+                    buttonText: 'Confirm',
+                    confirmText: 'Vazgeç',
+                    callback: () => {
+                        Popup.hide();
+                    },
+                    
+                })
+            }
+        />
+            
+        
+    </View>
+</Root>
+  <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+            setmodalVisible(!modalVisible);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>Rate the Driver!</Text>
+              <Button
+                title="Close"
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setmodalVisible(!modalVisible)} />
+              
+              
+            </View>
+          </View>
+    </Modal>
+
+    </View>   
+);
 };
 
 export default WaitingPickup;
 
 const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
   buttonStyle: {
     minWidth: 300,
     backgroundColor: "#7DE24E",
@@ -149,4 +174,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontSize: 16,
   },
+
+
 });

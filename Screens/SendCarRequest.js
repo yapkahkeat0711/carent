@@ -20,7 +20,7 @@ import auth from '@react-native-firebase/auth';
 const SendCarRequest = ({ route,navigation }) => {
     const ridesRef = database().ref('rides');
     const {customerPosition,destination}= route.params;
-    const [rideAccepted, setRideAccepted] = useState(false);
+    
     
     
     useEffect(() => {
@@ -47,18 +47,18 @@ const SendCarRequest = ({ route,navigation }) => {
         
       };
       function requestRide( user,pickupLocation, dropoffLocation) {
-        console.log("from request:",user)
         // Add a new ride to the database
         const newRideRef = ridesRef.push({
+          
           passenger: {
-          
-            username: "user.name", // Replace with actual passenger username
-          
+            username: user.name, // Replace with actual passenger username
+            email: user.email
           },
           driver: {
-            id: '',
+            username: '' ,
+            email:'',
             status: 'available',
-            token: ''
+          
           },
           pickupLocation: pickupLocation,
           dropoffLocation: dropoffLocation,
@@ -90,7 +90,7 @@ const SendCarRequest = ({ route,navigation }) => {
                 // Clear the timeout and resolve the promise with the new ride reference
                 clearTimeout(timeout);
                 newRideRef.off("value");
-                navigation.replace('WaitingPickup',{request:newRideRef});
+                navigation.replace('WaitingPickup');
               } else {
                 // Ride has not been accepted yet
               }
@@ -102,6 +102,7 @@ const SendCarRequest = ({ route,navigation }) => {
       }
     return (
         <View style={styles.container}>
+          <Text>Finding Driver ...</Text>
             <ActivityIndicator size="large"/>
             
         </View>
