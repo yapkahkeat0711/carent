@@ -19,16 +19,22 @@ import Modal from "react-native-modal";
 import database from '@react-native-firebase/database';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth'; 
+import CustomBtn from '../Components/CustomBtn';
 
 const WaitingPickup = ({ navigation }) => {
   
   const [modalVisible,setmodalVisible]= useState(false);
+  const [driver,setDriver]=useState({
+    username: '' ,
+    email:'',
+    status: 'available',
+  });
   const btnRef = useRef();
   useEffect(() => {
-      
+    navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
     WaitingDriverReach();
    
-  }, [])
+  }, [navigation])
 
   //when driver click arrived it will change the request and create popup for user
   function WaitingDriverReach(){
@@ -40,7 +46,7 @@ const WaitingPickup = ({ navigation }) => {
       //put each value into firstRef
       snapshot.forEach(function(item) {
         var request = item.val();
-
+        setDriver(request.driver);
         //check whether driver is arrived
         if(request.status==="arrived"){
           console.log("arrived");
@@ -60,9 +66,8 @@ const WaitingPickup = ({ navigation }) => {
   }
 
   return (
-    <View>
-      <Text>Waiting Driver to Pickup ...</Text>
-  {/* arrived popup    */}
+    <View style={{ backgroundColor: 'blue',flex:1}}>
+       {/* arrived popup    */}
   <Root>
     <View style={{ display: "none" }}>
         <Button 
@@ -106,14 +111,50 @@ const WaitingPickup = ({ navigation }) => {
             </View>
           </View>
     </Modal>
+    <View  style={styles.topCard}></View>
+    <View style={styles.bottomCard}>
+      
+      <Text style={{fontSize:20,textAlign:'center'}}>{driver.username}</Text>
+      <View style = {styles.lineStyle} />
+      <CustomBtn
+          btnText="Cancel Booking"
+          onPress={() => { navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});navigation.navigate('CustomerHomeMap');
+         }}
+          
+      />
+     
+ 
 
-    </View>   
+    </View>  
+    </View> 
 );
 };
 
 export default WaitingPickup;
 
 const styles = StyleSheet.create({
+  lineStyle:{
+    backgroundColor: '#A2A2A2',
+    height: 2,
+    width:350,
+    marginBottom:5,
+    marginTop:5,
+},
+  topCard: {
+    flex:0.1,
+    backgroundColor: 'blue',
+    width: '100%',
+    padding: 30,
+    
+},
+  bottomCard: {
+    flex:0.9,
+    backgroundColor: 'white',
+    width: '100%',
+    padding: 30,
+    borderTopEndRadius: 24,
+    borderTopStartRadius: 24
+},
   centeredView: {
     flex: 1,
     justifyContent: 'center',

@@ -26,7 +26,12 @@ const CustomerCheckFee = ({ route,navigation }) => {
         distance: 0,
     });
     
-
+    useEffect(() => {
+   
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
+     
+    }, [navigation])
+  
     const fetchTime = (d, t) => {
         setCal({
             distance: d,
@@ -36,11 +41,7 @@ const CustomerCheckFee = ({ route,navigation }) => {
     }
   return(
      <View style={styles.container}>
-          {calinfo.distance !== 0 && calinfo.time !== 0 && (<View style={{ alignItems: 'center', marginVertical: 16 }}>
-                <Text>Time Needed : {calinfo.time.toFixed(0)} mins</Text>
-                <Text>Distance : {calinfo.distance.toFixed(0)} KM</Text>
-                <Text>Price : RM{(calinfo.distance * 0.25).toFixed(2)}</Text>
-            </View>)}
+         
         
         <View style={styles.mapcontainer}>
           <MapView
@@ -80,13 +81,18 @@ const CustomerCheckFee = ({ route,navigation }) => {
             </MapView>
             </View>
             <View style={styles.bottomCard}>
-             
+            {calinfo.distance !== 0 && calinfo.time !== 0 && (<View style={{ alignItems: 'center' }}>
+                <Text style={{fontSize:15}}>Normal Ride: {calinfo.time.toFixed(0)} mins</Text>
+                <View style = {styles.lineStyle} />
+                <Text style={{fontSize:20}}>RM{(calinfo.distance * 0.25).toFixed(2)}</Text>
+            </View>)}
+            <View  style={{ alignItems: 'center', marginTop: 15}}>
                 <CustomBtn
                     btnText="Book Your Car"
-                    onPress={() => navigation.navigate('SendCarRequest',{customerPosition: customerPosition,destination:destination})}
+                    onPress={() => navigation.replace('SendCarRequest',{customerPosition: customerPosition,destination:destination})}
                    
                 />
-               
+                </View>
             </View>
             
           
@@ -103,6 +109,13 @@ const CustomerCheckFee = ({ route,navigation }) => {
 
 export default CustomerCheckFee;
 const styles = StyleSheet.create({
+  lineStyle:{
+    backgroundColor: '#A2A2A2',
+    height: 2,
+    width:350,
+    marginBottom:5,
+    marginTop:5,
+},
   container: {
     flex:1,
    

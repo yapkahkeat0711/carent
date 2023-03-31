@@ -24,10 +24,10 @@ const SendCarRequest = ({ route,navigation }) => {
     
     
     useEffect(() => {
-      
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
         fetchData()
        
-      }, [])
+      }, [navigation])
 
       
       async function fetchData () {
@@ -102,7 +102,7 @@ const SendCarRequest = ({ route,navigation }) => {
       }
     return (
         <View style={styles.container}>
-          <Text>Finding Driver ...</Text>
+          <Text style={{textAlign:'center',fontSize:30}}>Finding Driver ...</Text>
             <ActivityIndicator size="large"/>
             
         </View>

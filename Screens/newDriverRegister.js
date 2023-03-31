@@ -2,7 +2,7 @@
 // https://aboutreact.com/react-native-firebase-authentication/
 
 // Import React and Component
-import {React, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -14,7 +14,7 @@ import {
 
 import auth from "@react-native-firebase/auth";
 
-const Home = ({ navigation }) => {
+const NewDriverRegister = ({ navigation }) => {
   const [user, setUser] = useState();
 
   useEffect(() => {
@@ -84,7 +84,7 @@ const Home = ({ navigation }) => {
             </Text>
           ) : null}
           <TouchableOpacity
-            style={styles.clickButton}
+            style={styles.buttonStyle}
             activeOpacity={0.5}
             onPress={logout}
           >
@@ -92,38 +92,15 @@ const Home = ({ navigation }) => {
               Logout
             </Text>
           </TouchableOpacity>
-        
           <TouchableOpacity
-            style={styles.clickButton}
+            style={styles.buttonStyle}
             activeOpacity={0.5}
             onPress={() =>
-                navigation.replace("Customer")
+                navigation.navigate("Home")
               }
           >
             <Text style={styles.buttonTextStyle}>
-              To Customer View
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.clickButton}
-            activeOpacity={0.5}
-            onPress={() =>
-                navigation.replace("Driver")
-              }
-          >
-            <Text style={styles.buttonTextStyle}>
-              To Driver View
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.clickButton}
-            activeOpacity={0.5}
-            onPress={() =>
-                navigation.replace("CarMarketplace")
-              }
-          >
-            <Text style={styles.buttonTextStyle}>
-              To Car View
+              To Home View
             </Text>
           </TouchableOpacity>
         </View>
@@ -150,33 +127,26 @@ const Home = ({ navigation }) => {
   );
 };
 
-export default Home;
+export default NewDriverRegister;
 
 const styles = StyleSheet.create({
-  
+  buttonStyle: {
+    minWidth: 300,
+    backgroundColor: "#7DE24E",
+    borderWidth: 0,
+    color: "#FFFFFF",
+    borderColor: "#7DE24E",
+    height: 40,
+    alignItems: "center",
+    borderRadius: 30,
+    marginLeft: 35,
+    marginRight: 35,
+    marginTop: 20,
+    marginBottom: 25,
+  },
   buttonTextStyle: {
-    color: "#000",
+    color: "#FFFFFF",
     paddingVertical: 10,
     fontSize: 16,
-    textAlign: 'center',
-   
   },
-  clickButton: {
-    display: 'flex',
-    justifyContent: 'center',
-    width: 230,
-    height: 54,
-    borderRadius: 20,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 4,
-      height: 4,
-    },
-    shadowOpacity: 0.8,
-    shadowRadius: 4,
-    elevation: 8,
-  }
-
 });
-

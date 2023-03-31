@@ -2,7 +2,7 @@
 
 // Import React and Component
 import { useNavigation } from '@react-navigation/native';
-import React, { Component, useState } from 'react';
+import React, { Component, useState,useEffect} from 'react';
 import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import LocationInput from '../Components/LocationInput';
 import CustomBtn from '../Components/CustomBtn';
@@ -24,7 +24,12 @@ const CustomerHomeSelectDes = ({ route,navigation }) => {
     latitudeDelta: LATITUDE_DELTA,
     longitudeDelta: LONGITUDE_DELTA
   });
-  
+  useEffect(() => {
+   
+    navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
+   
+  }, [navigation])
+
 
   const fetchDestinationCords = (lat, lng, zipCode, cityText) => {
     console.log("zip code==>>>",zipCode)
@@ -57,22 +62,21 @@ const onDone = () => {
 }
   return(
     <View style={styles.container}>
-            {/* <ScrollView
-                keyboardShouldPersistTaps="handled"
-                style={{ backgroundColor: 'white', flex: 1, padding: 24 }}
-            > */}
-               <View style={{ marginBottom: 16 }} />
+           
+               <View style={{ marginBottom: 15}} />
                <LocationInput
                     placheholderText="Enter Destination Location"
                     fetchAddress={fetchDestinationCords}
                 />
+                  <View  style={{ alignItems: 'center', marginBottom: 15}}>
                    <CustomBtn
                     btnText="Done"
                     onPress={onDone}
+                
                    
                 />
-               
-            {/* </ScrollView> */}
+               </View>
+          
         </View>
       
          

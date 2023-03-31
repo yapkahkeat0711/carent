@@ -71,6 +71,11 @@ import CustomerCheckFee from "./Screens/CustomerCheckFee";
 import SendCarRequest from "./Screens/SendCarRequest";
 import WaitingPickup from "./Screens/WaitingPickup";
 
+import DriverHome from "./Screens/DriverHome";
+import NewDriverRegister from "./Screens/newDriverRegister";
+import DriverPage from "./Screens/DriverPage";
+
+import CarHome from "./Screens/CarHome";
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -111,6 +116,53 @@ function CustomerHomeStack(){
  </Stack.Navigator>
   );
 }
+
+
+function DriverHomeStack(){
+  return(
+ 
+    <Stack.Navigator initialRouteName={'DriverHome'}>
+    <Stack.Screen
+       name="DriverHome"
+       component={DriverHome}
+     ></Stack.Screen>
+     
+     <Stack.Screen
+       name="NewDriverRegister"
+       component={NewDriverRegister}
+       options={{
+        headerLeft: () => <></>,
+      }}
+     ></Stack.Screen>
+
+    <Stack.Screen
+       name="DriverPage"
+       component={DriverPage}
+       options={{
+        headerLeft: () => <></>,
+      }}
+     ></Stack.Screen>
+   </Stack.Navigator>
+    );
+
+}
+
+function CarHomeStack(){
+  return(
+ 
+    <Stack.Navigator initialRouteName={'CarHome'}>
+    <Stack.Screen
+       name="CarHome"
+       component={CarHome}
+     ></Stack.Screen>
+     
+     
+
+   
+   </Stack.Navigator>
+    );
+}
+
 function CustomerBottomTab(){
   return(
  
@@ -138,6 +190,51 @@ function CustomerBottomTab(){
       
   );
 }
+function DriverBottomTab(){
+  return (
+    <Tab.Navigator initialRouteName={'driverHomeStack'} 
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused,color, size }) => {
+          let iconName;
+
+          if (route.name === 'driverHomeStack') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'customerProfile') {
+            iconName = focused ? 'person-circle' : 'person-circle-outline';
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+      })}
+    >
+      <Tab.Screen name="driverHomeStack" component={DriverHomeStack}  />
+      <Tab.Screen name="customerProfile" component={CustomerProfile} />
+    </Tab.Navigator>
+  );
+}
+function CarMarketplaceBottomTab(){
+  return (
+    <Tab.Navigator initialRouteName={'CarHomeStack'} 
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused,color, size }) => {
+          let iconName;
+
+          if (route.name === 'CarHomeStack') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'customerProfile') {
+            iconName = focused ? 'person-circle' : 'person-circle-outline';
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+      })}
+    >
+      <Tab.Screen name="CarHomeStack" component={CarHomeStack}  />
+      <Tab.Screen name="customerProfile" component={CustomerProfile} />
+    </Tab.Navigator>
+  );
+}
+
 export default class App extends Component{
 
   render(){
@@ -170,6 +267,16 @@ export default class App extends Component{
             name="Customer"
             component={CustomerBottomTab}
             options={{headerShown: false}}
+          ></Stack.Screen>
+           <Stack.Screen
+            name="Driver"
+            component={DriverBottomTab}
+            options={{headerShown:false}}
+          ></Stack.Screen>
+            <Stack.Screen
+            name="CarMarketplace"
+            component={CarMarketplaceBottomTab}
+            options={{headerShown:false}}
           ></Stack.Screen>
         </Stack.Navigator>
 

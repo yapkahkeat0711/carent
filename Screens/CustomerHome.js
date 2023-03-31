@@ -91,12 +91,12 @@ const CustomerHome = ({ navigation }) => {
   );
 
   useEffect(() => {
-    
+    navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
     setGranted(requestLocationPermission());
     if(granted){
       readLocation();
     }
-  }, [])
+  }, [navigation])
 
 
 
