@@ -16,6 +16,7 @@ import {
   ScrollView,
 } from "react-native";
 
+import firestore from '@react-native-firebase/firestore';
 import auth from "@react-native-firebase/auth";
 
 const SignUp = ({ navigation }) => {
@@ -26,6 +27,29 @@ const SignUp = ({ navigation }) => {
 
   const emailInputRef = createRef();
   const passwordInputRef = createRef();
+
+
+  async function saveData(name,email) {
+    try {
+      const snapshot = await firestore()
+        .collection("User")
+        .add({
+                  name: name,
+                  email: email,
+                  isDriver:0,
+              })
+        .then((docRef) => {
+          console.log('Document written with ID: ', docRef.id);
+        })
+        .catch((error) => {
+          console.error('Error adding document: ', error);
+        });
+    
+  } catch (error) {
+      console.log("Error saving user data: ", error);
+  }
+    
+  };
 
   const handleSubmitButton = () => {
     setErrortext("");
@@ -39,7 +63,8 @@ const SignUp = ({ navigation }) => {
         userPassword
       )
       .then((user) => {
-        console.log(
+        saveData(userName,userEmail.toLowerCase());
+        alert(
           "Registration Successful. Please Login to proceed"
         );
         console.log(user);

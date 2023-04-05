@@ -74,6 +74,7 @@ import WaitingPickup from "./Screens/WaitingPickup";
 import DriverHome from "./Screens/DriverHome";
 import NewDriverRegister from "./Screens/newDriverRegister";
 import DriverPage from "./Screens/DriverPage";
+import BecomeDriver from "./Screens/BecomeDriver";
 
 import CarHome from "./Screens/CarHome";
 
@@ -125,20 +126,28 @@ function DriverHomeStack(){
     <Stack.Screen
        name="DriverHome"
        component={DriverHome}
+       options={{headerShown:false}}
      ></Stack.Screen>
      
      <Stack.Screen
        name="NewDriverRegister"
        component={NewDriverRegister}
        options={{
+        headerShown:false,
         headerLeft: () => <></>,
       }}
      ></Stack.Screen>
 
+      <Stack.Screen
+       name="BecomeDriver"
+       component={BecomeDriver}
+       options={{headerShown:false}}
+     ></Stack.Screen>
     <Stack.Screen
        name="DriverPage"
        component={DriverPage}
        options={{
+        headerShown:false,
         headerLeft: () => <></>,
       }}
      ></Stack.Screen>

@@ -13,117 +13,28 @@ import {
 } from "react-native";
 
 import auth from "@react-native-firebase/auth";
-
+import CustomBtn from '../Components/CustomBtn';
 const NewDriverRegister = ({ navigation }) => {
   const [user, setUser] = useState();
 
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged((user) => {
-      console.log("user", JSON.stringify(user));
-      setUser(user);
-    });
-
-    return subscriber;
-  }, []);
-
-  const logout = () => {
-    Alert.alert(
-      "Logout",
-      "Are you sure? You want to logout?",
-      [
-        {
-          text: "Cancel",
-          onPress: () => {
-            return null;
-          },
-        },
-        {
-          text: "Confirm",
-          onPress: () => {
-            auth()
-              .signOut()
-              .then(() => navigation.replace("Login"))
-              .catch((error) => {
-                console.log(error);
-                if (error.code === "auth/no-current-user")
-                  navigation.replace("Login");
-                else alert(error);
-              });
-          },
-        },
-      ],
-      { cancelable: false }
-    );
-  };
+  
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ flex: 1, padding: 16 }}>
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 20,
-              textAlign: "center",
-              marginBottom: 16,
-            }}
-          >
-            Firebase Auth
-          </Text>
-          {user ? (
-            <Text>
-              Welcome{" "}
-              {user.displayName
-                ? user.displayName
-                : user.email}
-            </Text>
-          ) : null}
-          <TouchableOpacity
-            style={styles.buttonStyle}
-            activeOpacity={0.5}
-            onPress={logout}
-          >
-            <Text style={styles.buttonTextStyle}>
-              Logout
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.buttonStyle}
-            activeOpacity={0.5}
-            onPress={() =>
-                navigation.navigate("Home")
-              }
-          >
-            <Text style={styles.buttonTextStyle}>
-              To Home View
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <Text
-          style={{
-            fontSize: 18,
-            textAlign: "center",
-            color: "grey",
-          }}
-        >
-          React Native Firebase Authentication
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            textAlign: "center",
-            color: "grey",
-          }}
-        >
-          www.aboutreact.com
-        </Text>
-      </View>
-    </SafeAreaView>
+    <View style={{ alignItems: 'center', justifyContent: 'center',flex:1}}>
+       <CustomBtn
+          btnText="Become Driver"
+          onPress={() => navigation.replace('BecomeDriver')}
+          
+      />
+        <Text>
+        {'\n'}
+      </Text>
+        <CustomBtn
+          btnText="Go To Home"
+          onPress={() => navigation.replace('Home')}
+          
+      />
+    </View>
   );
 };
 
