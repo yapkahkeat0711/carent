@@ -34,9 +34,9 @@ const SignUp = ({ navigation }) => {
       const snapshot = await firestore()
         .collection("User")
         .add({
-                  name: name,
-                  email: email,
-                  isDriver:0,
+            name: name,
+            email: email,
+            isDriver:0,
               })
         .then((docRef) => {
           console.log('Document written with ID: ', docRef.id);
