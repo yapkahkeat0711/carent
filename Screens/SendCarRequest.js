@@ -20,14 +20,29 @@ import auth from '@react-native-firebase/auth';
 const SendCarRequest = ({ route,navigation }) => {
     const ridesRef = database().ref('rides');
     const {customerPosition,destination}= route.params;
-    
+   
     
     
     useEffect(() => {
-      navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
-        fetchData()
+      
+      const unsubscribe = navigation.addListener('focus', () => {
+        // Show the bottom tab bar when the screen comes into focus
+        navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
+      });
+  
+      const subscribe = navigation.addListener('blur', () => {
+        // Hide the bottom tab bar when the screen loses focus
+        navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
+      });
+      fetchData();
+      // Cleanup the listeners when the component unmounts
+      return () => {
+        unsubscribe();
+        subscribe();
+      };
+        
        
-      }, [navigation])
+      }, [navigation]);
 
       
       async function fetchData () {
@@ -40,7 +55,14 @@ const SendCarRequest = ({ route,navigation }) => {
             .get();
           const fetchedData = snapshot.docs.map((doc) => doc.data())[0];
           console.log("from getData:", fetchedData);
-          requestRide(fetchedData, customerPosition, destination);
+          requestRide(fetchedData, customerPosition, destination)
+          .then((result) => {
+            // Do something with the result
+          })
+          .catch((error) => {
+            console.log("Promise rejected:", error);
+            navigation.goBack();
+          });
       } catch (error) {
           console.log("Error fetching user data: ", error);
       }
@@ -78,9 +100,9 @@ const SendCarRequest = ({ route,navigation }) => {
                   reject(new Error("Request timed out"));
                 })
                 .catch((error) => reject(error));
-              navigation.goBack();
-            }, 20000);
-        
+             
+            }, 15000);
+            
             // Listen for changes to the new ride request
             newRideRef.on("value", (snapshot) => {
               const ride = snapshot.val();
@@ -96,7 +118,7 @@ const SendCarRequest = ({ route,navigation }) => {
               }
             });
           });
-       
+      
      
 
       }

@@ -26,11 +26,7 @@ const CustomerCheckFee = ({ route,navigation }) => {
         distance: 0,
     });
     
-    useEffect(() => {
    
-      navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
-     
-    }, [navigation])
   
     const fetchTime = (d, t) => {
         setCal({
@@ -39,6 +35,24 @@ const CustomerCheckFee = ({ route,navigation }) => {
         })
         
     }
+
+    useEffect(() => {
+      const unsubscribe = navigation.addListener('focus', () => {
+        // Show the bottom tab bar when the screen comes into focus
+        navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
+      });
+    
+      const subscribe = navigation.addListener('blur', () => {
+        // Hide the bottom tab bar when the screen loses focus
+        navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
+      });
+      
+       // Cleanup the listeners when the component unmounts
+       return () => {
+        unsubscribe();
+        subscribe();
+      };
+    }, [navigation])
   return(
      <View style={styles.container}>
          
@@ -89,7 +103,7 @@ const CustomerCheckFee = ({ route,navigation }) => {
             <View  style={{ alignItems: 'center', marginTop: 15}}>
                 <CustomBtn
                     btnText="Book Your Car"
-                    onPress={() => navigation.replace('SendCarRequest',{customerPosition: customerPosition,destination:destination})}
+                    onPress={() => navigation.navigate('SendCarRequest',{customerPosition: customerPosition,destination:destination})}
                    
                 />
                 </View>

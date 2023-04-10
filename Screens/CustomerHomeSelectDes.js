@@ -24,11 +24,7 @@ const CustomerHomeSelectDes = ({ route,navigation }) => {
     latitudeDelta: LATITUDE_DELTA,
     longitudeDelta: LONGITUDE_DELTA
   });
-  useEffect(() => {
-   
-    navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
-   
-  }, [navigation])
+
 
 
   const fetchDestinationCords = (lat, lng, zipCode, cityText) => {
@@ -60,6 +56,24 @@ const onDone = () => {
     navigation.navigate('CustomerCheckFee',{customerPosition: customerPosition,destination:Destination})
   }
 }
+
+useEffect(() => {
+  const unsubscribe = navigation.addListener('focus', () => {
+    // Show the bottom tab bar when the screen comes into focus
+    navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
+  });
+
+  const subscribe = navigation.addListener('blur', () => {
+    // Hide the bottom tab bar when the screen loses focus
+    navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
+  });
+  
+   // Cleanup the listeners when the component unmounts
+   return () => {
+    unsubscribe();
+    subscribe();
+  };
+}, [navigation])
   return(
     <View style={styles.container}>
            
