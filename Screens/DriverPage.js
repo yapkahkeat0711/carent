@@ -20,7 +20,8 @@ import database from '@react-native-firebase/database';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth'; 
 import Modal from "react-native-modal";
-
+import Geocoder from 'react-native-geocoding';
+import flatted from 'flatted';
 
 async function requestLocationPermission() {
   try {
@@ -50,8 +51,45 @@ const screen = Dimensions.get('window');
 const ASPECT_RATIO = screen.width / screen.height;
 const LATITUDE_DELTA = 0.04;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
+
 const DriverPage = ({ navigation }) => {
 
+  const mapRef = useRef();
+  const [Newsnapshot, setSnapshot] = useState(null);
+  const [status, setStatus] = useState(false);
+  const [available, setAvailable] = useState(true);
+  const [modalVisible, setmodalVisible] = useState(false);
+  const [newChildData, setNewChildData] = useState({
+    data:{
+      fee:'',
+    },
+    pickupname:'',
+    dropoffname:'',
+  });
+  const [customerPosition, setCustomerPosition] = useState({
+    
+    latitude: 0,
+    longitude: 0,
+    latitudeDelta: LATITUDE_DELTA,
+    longitudeDelta: LONGITUDE_DELTA
+  });
+  async function findDriverName () {
+    try {
+      const useremail =  auth().currentUser.email;
+      const snapshot = await firestore()
+        .collection("User")
+        .where("email", "==", useremail)
+        .get();
+      const fetchedData = snapshot.docs.map((doc) => doc.data())[0];
+      return fetchedData;
+      
+  } catch (error) {
+      console.log("Error fetching user data: ", error);
+      return { error: "Error fetching user data" };
+  }
+    
+  };
   const readLocation=()=> {
     Geolocation.getCurrentPosition(
         (position) => { 
@@ -82,14 +120,92 @@ const DriverPage = ({ navigation }) => {
         }
     );
   
-  }
+  };
 
   const readlivelocation = async () => {
     const locPermission = await requestLocationPermission();
     if(locPermission){
       readLocation();
     }
-  }
+  };
+
+  const getAddressComponents = (addressComponents) => {
+    const result = {
+      city: null,
+      state: null,
+      country: null,
+      streetAddress:null,
+      postalCode:null,
+    };
+  
+    addressComponents.forEach((component) => {
+      if (component.types.includes("route")) {
+        result.streetAddress = component.long_name;
+      }
+      if (component.types.includes("street_number")) {
+        result.streetAddress += " " + component.long_name;
+      }
+      if (component.types.includes("postal_code")) {
+        result.postalCode = component.long_name;
+      }
+      if (component.types.includes("locality")) {
+        result.city = component.long_name;
+      }
+      if (component.types.includes("administrative_area_level_1")) {
+        result.state = component.short_name;
+      }
+      if (component.types.includes("country")) {
+        result.country = component.long_name;
+      }
+    });
+  
+    return result;
+  };
+
+  const  accepteRequest = async (Newsnapshot) =>{
+    const driver = await findDriverName();
+    const data = Newsnapshot.val(); // Get the data from the snapshot
+    const newData = { ...data,  driver: { email: auth().currentUser.email , username:driver.name } }; // Update the desired field
+    Newsnapshot.ref.set(newData); // Set the updated data back to the database
+  };
+
+  const onChildAdded = (snapshot) => {
+  
+      if(snapshot.val().status==="requested"){
+        setSnapshot(snapshot);
+        setmodalVisible(!modalVisible);
+       
+        //check location name
+        Geocoder.init("AIzaSyBS0SHCUgOxAQ5gqVUSTtug_5AdQDloy4A");
+        Geocoder.from(snapshot.val().pickupLocation.latitude, snapshot.val().pickupLocation.longitude)
+        .then((json) => {
+          var addressComponents = json.results[0].address_components;
+          const pickuppoint = getAddressComponents(addressComponents);
+          setNewChildData(prevState => ({
+            ...prevState,
+            pickupname: pickuppoint
+          }));
+        })
+        .catch((error) => console.warn(error));
+        Geocoder.from(snapshot.val().dropoffLocation.latitude, snapshot.val().dropoffLocation.longitude)
+        .then((json) => {
+          var addressComponents = json.results[0].address_components;
+          const pickuppoint = getAddressComponents(addressComponents);
+          setNewChildData(prevState => ({
+            ...prevState,
+            dropoffname: pickuppoint
+          }));
+        })
+        .catch((error) => console.warn(error));
+
+        setNewChildData(prevState => ({
+          ...prevState,
+          data:snapshot.val(),
+        }));
+        console.log(newChildData);
+      }
+     
+  };
 
   const goOnline = () => {
     const availableRef = database().ref('rides').orderByChild("driver/email").equalTo(auth().currentUser.email).limitToFirst(1);
@@ -108,33 +224,16 @@ const DriverPage = ({ navigation }) => {
 
     if(status===false && available===true){
       console.log("Onlining");
-      database().ref('rides').on('child_added', (snapshot, prevChildKey)  => {
-        setNewChildData(snapshot.val());
+      database().ref('rides').on('child_added', onChildAdded);
+       
         
-      
-        setmodalVisible(!modalVisible);
-        console.log(snapshot.val());
-        
-      });
+     
     }else{
       console.log("offlining");
+      database().ref('rides').off('child_added', onChildAdded);
     }
 
-  }
-  const mapRef = useRef()
-  const [status, setStatus] = useState(false);
-  const [available, setAvailable] = useState(true);
-  const [modalVisible,setmodalVisible]= useState(false);
-  const [newChildData, setNewChildData] = useState(null);
-  const [customerPosition, setCustomerPosition] = useState({
-    
-    latitude: 0,
-    longitude: 0,
-    latitudeDelta: LATITUDE_DELTA,
-    longitudeDelta: LONGITUDE_DELTA
-  });
-
- 
+  };
 
   useEffect(() => {
    
@@ -147,6 +246,7 @@ const DriverPage = ({ navigation }) => {
       // Hide the bottom tab bar when the screen loses focus
       navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
       clearInterval(interval);
+      database().ref('rides').off('child_added', onChildAdded);
     });
    
      const interval = setInterval(() => {
@@ -168,7 +268,9 @@ const DriverPage = ({ navigation }) => {
 
   return(
     <View style={styles.container}>
-      <Modal
+   
+     
+   {modalVisible && (<Modal
           animationType="slide"
           transparent={true}
           visible={modalVisible}
@@ -178,22 +280,32 @@ const DriverPage = ({ navigation }) => {
           }}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalText}>Rate the Driver!</Text>
-              
+              <Text style={styles.modalText}>New Request!</Text>
+              <Text style={styles.modalText}>From:{newChildData.pickupname.streetAddress}</Text>
+              <Text style={styles.modalText}>To:{newChildData.dropoffname.streetAddress}</Text>
+              <Text style={styles.modalText}>RM {newChildData.data.fee}</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Button
-                title="Accept"
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setmodalVisible(!modalVisible)} />
-                 <Button
-                title="Decline"
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setmodalVisible(!modalVisible)} />
-               </View>
-              
+                <Button
+                  title="Accept"
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => {
+                    accepteRequest(Newsnapshot);
+                    const serializedSnapshot = flatted.stringify(Newsnapshot);
+                    navigation.replace('DriverPickupPage',{newChildData:newChildData,Newsnapshot:serializedSnapshot});
+                  }}
+                />
+                <Button
+                  title="Decline"
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => setmodalVisible(!modalVisible)}
+                />
+              </View>
             </View>
           </View>
-      </Modal>
+        </Modal>)}
+     
+      
+
         <View style={styles.mapcontainer}>
           <MapView
           style={StyleSheet.absoluteFill}

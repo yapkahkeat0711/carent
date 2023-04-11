@@ -103,7 +103,7 @@ const CustomerCheckFee = ({ route,navigation }) => {
             <View  style={{ alignItems: 'center', marginTop: 15}}>
                 <CustomBtn
                     btnText="Book Your Car"
-                    onPress={() => navigation.navigate('SendCarRequest',{customerPosition: customerPosition,destination:destination})}
+                    onPress={() => navigation.navigate('SendCarRequest',{customerPosition: customerPosition,destination:destination,fee:((calinfo.distance * 0.25).toFixed(2))})}
                    
                 />
                 </View>

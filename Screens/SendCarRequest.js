@@ -19,7 +19,7 @@ import auth from '@react-native-firebase/auth';
       
 const SendCarRequest = ({ route,navigation }) => {
     const ridesRef = database().ref('rides');
-    const {customerPosition,destination}= route.params;
+    const {customerPosition,destination,fee}= route.params;
    
     
     
@@ -78,13 +78,12 @@ const SendCarRequest = ({ route,navigation }) => {
           },
           driver: {
             username: '' ,
-            email:'',
-            status: 'available',
-          
+            email:'',  
           },
           pickupLocation: pickupLocation,
           dropoffLocation: dropoffLocation,
-          status: 'requested'
+          status: 'requested',
+          fee:fee,
         });
         console.log('Request created');
 
