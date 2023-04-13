@@ -96,9 +96,9 @@ const CustomerCheckFee = ({ route,navigation }) => {
             </View>
             <View style={styles.bottomCard}>
             {calinfo.distance !== 0 && calinfo.time !== 0 && (<View style={{ alignItems: 'center' }}>
-                <Text style={{fontSize:15}}>Normal Ride: {calinfo.time.toFixed(0)} mins</Text>
+                <Text style={{fontSize:20,bottom:10}}>Normal Ride: {'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{'\t'}{calinfo.time.toFixed(0)} mins</Text>
                 <View style = {styles.lineStyle} />
-                <Text style={{fontSize:20}}>RM{(calinfo.distance * 0.25).toFixed(2)}</Text>
+                <Text style={{fontSize:30}}>RM{((calinfo.distance * 0.25).toFixed(2))}</Text>
             </View>)}
             <View  style={{ alignItems: 'center', marginTop: 15}}>
                 <CustomBtn

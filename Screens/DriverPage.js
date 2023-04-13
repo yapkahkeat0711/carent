@@ -57,6 +57,7 @@ const DriverPage = ({ navigation }) => {
 
   const mapRef = useRef();
   const [Newsnapshot, setSnapshot] = useState(null);
+  const [availableRef, setAvailableRef] = useState(null);
   const [status, setStatus] = useState(false);
   const [available, setAvailable] = useState(true);
   const [modalVisible, setmodalVisible] = useState(false);
@@ -165,14 +166,27 @@ const DriverPage = ({ navigation }) => {
   const  accepteRequest = async (Newsnapshot) =>{
     const driver = await findDriverName();
     const data = Newsnapshot.val(); // Get the data from the snapshot
-    const newData = { ...data,  driver: { email: auth().currentUser.email , username:driver.name } }; // Update the desired field
+    const newData = { ...data, status:'accepted', driver: { email: auth().currentUser.email , username:driver.name } }; // Update the desired field
     Newsnapshot.ref.set(newData); // Set the updated data back to the database
   };
+  
 
+  const onRemove = (removedSnapshot,snapshot) => {
+ 
+      //check the removed snapshot is the snap or not
+      if(removedSnapshot.key === snapshot.key){
+        setmodalVisible(false);
+        removedSnapshot.ref.parent.off('child_removed', onRemove);
+
+      }
+  
+   
+  };
   const onChildAdded = (snapshot) => {
   
       if(snapshot.val().status==="requested"){
         setSnapshot(snapshot);
+        snapshot.ref.parent.on('child_removed', onRemove.bind(this, snapshot));
         setmodalVisible(!modalVisible);
        
         //check location name
@@ -207,30 +221,35 @@ const DriverPage = ({ navigation }) => {
      
   };
 
+  const onchangeCheckAvailable = (avalablesnapshot) => {
+
+    if (avalablesnapshot.exists()) {
+      // Data exists, do nothing
+    } else {
+      // Data doesn't exist, popup
+      setAvailable(true);
+
+      
+    }
+  };
+
   const goOnline = () => {
+    //check driver available
     const availableRef = database().ref('rides').orderByChild("driver/email").equalTo(auth().currentUser.email).limitToFirst(1);
-        availableRef.on('value', (avalablesnapshot) => {
-          if (avalablesnapshot.exists()) {
-            // Data exists, do nothing
-          } else {
-            // Data doesn't exist, popup
-            setAvailable(true);
+    setAvailableRef(availableRef);
+    availableRef.on('value', onchangeCheckAvailable);
 
-            
-          }
-        }, (error) => {
-          // Handle any errors that occur while listening for the data
-        });
-
+    //go online
     if(status===false && available===true){
       console.log("Onlining");
       database().ref('rides').on('child_added', onChildAdded);
-       
-        
      
+        
+     //go offline
     }else{
       console.log("offlining");
       database().ref('rides').off('child_added', onChildAdded);
+      
     }
 
   };
@@ -247,6 +266,7 @@ const DriverPage = ({ navigation }) => {
       navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
       clearInterval(interval);
       database().ref('rides').off('child_added', onChildAdded);
+
     });
    
      const interval = setInterval(() => {
@@ -291,7 +311,7 @@ const DriverPage = ({ navigation }) => {
                   onPress={() => {
                     accepteRequest(Newsnapshot);
                     const serializedSnapshot = flatted.stringify(Newsnapshot);
-                    navigation.replace('DriverPickupPage',{newChildData:newChildData,Newsnapshot:serializedSnapshot});
+                    navigation.replace('DriverPickupPage',{newChildData:newChildData,Newsnapshot:Newsnapshot});
                   }}
                 />
                 <Button

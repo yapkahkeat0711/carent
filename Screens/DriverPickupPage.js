@@ -16,13 +16,34 @@ import MapView,{Marker} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import CustomBtn from '../Components/CustomBtn';
 import flatted from 'flatted';
+import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth'; 
+
 
 const DriverPickupPage = ({route,navigation }) => {
   const { data, pickupname, dropoffname } = route.params.newChildData;
-  const snapshot = flatted.parse(route.params.Newsnapshot);
-  const [passengerData,setPassengerData]=useState();
  
+  const snapshot = route.params.Newsnapshot;
+  const [passengerData,setPassengerData]=useState();
+  const [requestStatus,setRequestStatus]=useState('accepted');
+
   
+  const driverArrived = (snapshot) =>{
+    setRequestStatus('arrived');
+    const data = snapshot.val(); // Get the data from the snapshot
+    const newData = { ...data, status:'arrived' }; // Update the desired field
+    snapshot.ref.set(newData); // Set the updated data back to the database
+    
+  };
+  const driverDone = (snapshot) =>{
+    setRequestStatus('done');
+    const data = snapshot.val(); // Get the data from the snapshot
+    const newData = { ...data, status:'done' }; // Update the desired field
+    snapshot.ref.set(newData); // Set the updated data back to the database
+    navigation.replace('DriverPage');
+  };
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       // Show the bottom tab bar when the screen comes into focus
@@ -51,12 +72,19 @@ const DriverPickupPage = ({route,navigation }) => {
       <View style={styles.bottomCard}>
       
       <Text style={{fontSize:20,textAlign:'center'}}>From: {pickupname.streetAddress}</Text>
+      <Text style={{fontSize:20,textAlign:'center'}}>To: {dropoffname.streetAddress}</Text>
       <View  style={styles.btmbutton}>
-      <CustomBtn
+      {requestStatus==='accepted' && <CustomBtn
           btnText="I've Arrived"
-          onPress={{}}
+          onPress={()=> driverArrived(snapshot)}
                    
-      />
+      />}
+      {requestStatus==='arrived' && <CustomBtn
+          btnText="Done"
+          onPress={()=> driverDone(snapshot)}
+                   
+      />}
+
       </View> 
       </View>  
           

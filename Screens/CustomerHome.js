@@ -130,7 +130,8 @@ const CustomerHome = ({ navigation }) => {
                 <Text>Where are you going..?</Text>
                 <CustomBtn
                     btnText="Choose your location"
-                    onPress={() => navigation.navigate('CustomerHomeSelectDes',{customerPosition: customerPosition,})}
+                    btnStyle={{top:20,left:20}}
+                    onPress={() => navigation.navigate('CustomerHomeSelectDes',{customerPosition: customerPosition})}
                    
                 />
               
@@ -161,9 +162,10 @@ const styles = StyleSheet.create({
     flex:0.2,
     backgroundColor: 'white',
     width: '100%',
-    padding: 30,
+    padding: 25,
     borderTopEndRadius: 24,
     borderTopStartRadius: 24
+    
 },
 inpuStyle: {
     backgroundColor: 'white',

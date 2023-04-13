@@ -111,7 +111,7 @@ const SendCarRequest = ({ route,navigation }) => {
                 // Clear the timeout and resolve the promise with the new ride reference
                 clearTimeout(timeout);
                 newRideRef.off("value");
-                navigation.replace('WaitingPickup');
+                navigation.replace('WaitingPickup',{snapshot:snapshot});
               } else {
                 // Ride has not been accepted yet
               }

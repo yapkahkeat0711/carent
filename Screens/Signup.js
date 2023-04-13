@@ -14,10 +14,12 @@ import {
   Keyboard,
   TouchableOpacity,
   ScrollView,
+  ImageBackground
 } from "react-native";
-
+import CustomBtn from '../Components/CustomBtn';
 import firestore from '@react-native-firebase/firestore';
 import auth from "@react-native-firebase/auth";
+import InteractiveTextInput from "react-native-text-input-interactive";
 
 const SignUp = ({ navigation }) => {
   const [userName, setUserName] = useState("");
@@ -96,8 +98,11 @@ const SignUp = ({ navigation }) => {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#307ecc" }}
+      style={styles.mainBody}
     >
+       <ImageBackground 
+    source={require('../assets/backgroundImage.png')} 
+    style={{ flex: 1, width: '100%', height: '100%', resizeMode: 'cover' }}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{
@@ -105,70 +110,62 @@ const SignUp = ({ navigation }) => {
           alignContent: "center",
         }}
       >
-        <View style={{ alignItems: "center" }}>
-          {/* <Image
-            source={require("../Image/aboutreact.png")}
-            style={{
-              width: "50%",
-              height: 100,
-              resizeMode: "contain",
-              margin: 30,
-            }}
-          /> */}
+        <View >
+          
         </View>
         <KeyboardAvoidingView enabled>
           <View style={styles.sectionStyle}>
-            <TextInput
-              style={styles.inputStyle}
-              onChangeText={(UserName) =>
-                setUserName(UserName)
-              }
-              underlineColorAndroid="#f000"
-              placeholder="Enter Name"
-              placeholderTextColor="#8b9cb5"
-              autoCapitalize="sentences"
-              returnKeyType="next"
-              onSubmitEditing={() =>
-                emailInputRef.current &&
-                emailInputRef.current.focus()
-              }
-              blurOnSubmit={false}
+            <InteractiveTextInput
+            onChangeText={(UserName) =>
+              setUserName(UserName)
+            }
+            underlineColorAndroid="#f000"
+            placeholder="Enter Name"
+            placeholderTextColor="#8b9cb5"
+            autoCapitalize="sentences"
+            returnKeyType="next"
+            onSubmitEditing={() =>
+              emailInputRef.current &&
+              emailInputRef.current.focus()
+            }
+            blurOnSubmit={false}
             />
+          
           </View>
           <View style={styles.sectionStyle}>
-            <TextInput
-              style={styles.inputStyle}
-              onChangeText={(UserEmail) =>
-                setUserEmail(UserEmail)
-              }
-              underlineColorAndroid="#f000"
-              placeholder="Enter Email"
-              placeholderTextColor="#8b9cb5"
-              keyboardType="email-address"
-              ref={emailInputRef}
-              returnKeyType="next"
-              onSubmitEditing={() =>
-                passwordInputRef.current &&
-                passwordInputRef.current.focus()
-              }
-              blurOnSubmit={false}
+            <InteractiveTextInput
+             onChangeText={(UserEmail) =>
+              setUserEmail(UserEmail)
+            }
+            underlineColorAndroid="#f000"
+            placeholder="Enter Email"
+            placeholderTextColor="#8b9cb5"
+            keyboardType="email-address"
+            ref={emailInputRef}
+            returnKeyType="next"
+            onSubmitEditing={() =>
+              passwordInputRef.current &&
+              passwordInputRef.current.focus()
+            }
+            blurOnSubmit={false}
             />
+           
           </View>
           <View style={styles.sectionStyle}>
-            <TextInput
-              style={styles.inputStyle}
-              onChangeText={(UserPassword) =>
-                setUserPassword(UserPassword)
-              }
-              underlineColorAndroid="#f000"
-              placeholder="Enter Password"
-              placeholderTextColor="#8b9cb5"
-              ref={passwordInputRef}
-              returnKeyType="next"
-              secureTextEntry={true}
-              onSubmitEditing={Keyboard.dismiss}
-              blurOnSubmit={false}
+            <InteractiveTextInput
+             onChangeText={(UserPassword) =>
+              setUserPassword(UserPassword)
+            }
+            underlineColorAndroid="#f000"
+            placeholder="Enter Password"
+            placeholderTextColor="#8b9cb5"
+            ref={passwordInputRef}
+            returnKeyType="next"
+            secureTextEntry={true}
+            onSubmitEditing={Keyboard.dismiss}
+            blurOnSubmit={false}
             />
+           
           </View>
           {errortext != "" ? (
             <Text style={styles.errorTextStyle}>
@@ -176,42 +173,30 @@ const SignUp = ({ navigation }) => {
               {errortext}{" "}
             </Text>
           ) : null}
-          <TouchableOpacity
-            style={styles.buttonStyle}
-            activeOpacity={0.5}
-            onPress={handleSubmitButton}
-          >
-            <Text style={styles.buttonTextStyle}>
-              REGISTER
-            </Text>
-          </TouchableOpacity>
+            <View  style={{ alignItems: 'center'}}>
+            <CustomBtn
+          btnText="REGISTER"
+          onPress={handleSubmitButton}    
+          />
+            </View>
+         
+       
           
         </KeyboardAvoidingView>
       </ScrollView>
-      <Text
-        style={{
-          fontSize: 18,
-          textAlign: "center",
-          color: "white",
-        }}
-      >
-        React Native Firebase Authentication
-      </Text>
-      <Text
-        style={{
-          fontSize: 16,
-          textAlign: "center",
-          color: "white",
-        }}
-      >
-        www.aboutreact.com
-      </Text>
+      </ImageBackground>
+     
     </SafeAreaView>
   );
 };
 export default SignUp;
 
 const styles = StyleSheet.create({
+  mainBody: {
+    flex: 1,
+    justifyContent: "center",
+    alignContent: "center",
+  },
   sectionStyle: {
     flexDirection: "row",
     height: 40,
@@ -219,6 +204,8 @@ const styles = StyleSheet.create({
     marginLeft: 35,
     marginRight: 35,
     margin: 10,
+    justifyContent: "center",
+    alignContent: "center",
   },
   buttonStyle: {
     backgroundColor: "#7DE24E",

@@ -21,21 +21,64 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth'; 
 import CustomBtn from '../Components/CustomBtn';
 
-const WaitingPickup = ({ navigation }) => {
-  
+const WaitingPickup = ({route,navigation }) => {
+  const snapshot = route.params.snapshot;
   const [modalVisible,setmodalVisible]= useState(false);
   const [driver,setDriver]=useState({
     username: '' ,
     email:'',
-    status: 'available',
+    car:{
+      car_brand:'',
+      car_plate:'',
+      car_color:'',
+      car_photo:'',
+    }
   });
   const btnRef = useRef();
-  useEffect(() => {
-    navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
-    WaitingDriverReach();
-   
-  }, [navigation])
 
+  async function GetDriverInfo (snapshot) {
+    try {
+      
+      const useremail =  snapshot.val().driver.email;
+      const driversnapshot = await firestore()
+        .collection("Car_of_Driver")
+        .where("email", "==", useremail)
+        .get();
+      const fetchedData = driversnapshot.docs.map((doc) => doc.data())[0];
+      console.log("dada",snapshot.val());
+      console.log("dada",fetchedData);
+      setDriver({
+        username: snapshot.val().driver.username ,
+        email:snapshot.val().driver.email,
+        car:{
+          car_brand:fetchedData.car_brand,
+          car_plate:fetchedData.car_plate_number,
+          car_color:fetchedData.car_color,
+          car_photo:fetchedData.photoURL,
+        }
+      });
+      
+  } catch (error) {
+      console.log("Error fetching user data: ", error);
+      return { error: "Error fetching user data" };
+  }
+    
+  };
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      // Show the bottom tab bar when the screen comes into focus
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
+    });
+
+    const subscribe = navigation.addListener('blur', () => {
+      // Hide the bottom tab bar when the screen loses focus
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
+    });
+    WaitingDriverReach();
+    GetDriverInfo(snapshot);
+  }, [navigation])
+  
+ 
   //when driver click arrived it will change the request and create popup for user
   function WaitingDriverReach(){
     //only one request for a user in the same time
@@ -46,7 +89,7 @@ const WaitingPickup = ({ navigation }) => {
       //put each value into firstRef
       snapshot.forEach(function(item) {
         var request = item.val();
-        setDriver(request.driver);
+       
         //check whether driver is arrived
         if(request.status==="arrived"){
           console.log("arrived");
@@ -111,9 +154,15 @@ const WaitingPickup = ({ navigation }) => {
             </View>
           </View>
     </Modal>
-    <View  style={styles.topCard}></View>
+   
+    <View  style={styles.circleWrapper}>
+        <View style={styles.circle} >
+
+        </View>
+    </View>
+   
     <View style={styles.bottomCard}>
-      
+    
       <Text style={{fontSize:20,textAlign:'center'}}>{driver.username}</Text>
       <View style = {styles.lineStyle} />
       <CustomBtn
@@ -133,27 +182,45 @@ const WaitingPickup = ({ navigation }) => {
 export default WaitingPickup;
 
 const styles = StyleSheet.create({
+  circleWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  zIndex: 1,
+  },
+  circle: {
+    
+    top:50,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    backgroundColor: 'white',
+   
+  },
   lineStyle:{
     backgroundColor: '#A2A2A2',
     height: 2,
-    width:350,
+    width:'100%',
     marginBottom:5,
     marginTop:5,
 },
-  topCard: {
-    flex:0.1,
-    backgroundColor: 'blue',
-    width: '100%',
-    padding: 30,
-    
-},
+
   bottomCard: {
-    flex:0.9,
+    flex:0.99,
     backgroundColor: 'white',
     width: '100%',
+    zIndex: 2,
     padding: 30,
     borderTopEndRadius: 24,
-    borderTopStartRadius: 24
+    borderTopStartRadius: 24,
+    zIndex: 0,
 },
   centeredView: {
     flex: 1,

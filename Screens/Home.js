@@ -10,6 +10,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  ImageBackground,
+  Image
 } from "react-native";
 
 import auth from "@react-native-firebase/auth";
@@ -55,43 +57,49 @@ const Home = ({ navigation }) => {
       { cancelable: false }
     );
   };
-
+  
   return (
+   
     <SafeAreaView style={{ flex: 1 }}>
+      
+      <ImageBackground 
+    source={require('../assets/backgroundImage.png')} 
+    style={{ flex: 1, width: '100%', height: '100%', resizeMode: 'cover' }}>
+      
       <View style={{ flex: 1, padding: 16 }}>
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 20,
-              textAlign: "center",
-              marginBottom: 16,
-            }}
-          >
-            Firebase Auth
-          </Text>
-          {user ? (
-            <Text>
-              Welcome{" "}
+      
+      <View style={styles.welcomeWord}>
+      {user ? (
+            <Text  style={{ fontWeight: 'bold', fontSize: 25 }}>
+              WELCOME !
+             
+            </Text>
+          ) : null}
+      {user ? (
+            <Text  style={{ fontWeight: 'bold', fontSize: 30 }}>
+            
               {user.displayName
                 ? user.displayName
                 : user.email}
+                {'\n'}
             </Text>
           ) : null}
-          <TouchableOpacity
-            style={styles.clickButton}
-            activeOpacity={0.5}
-            onPress={logout}
-          >
-            <Text style={styles.buttonTextStyle}>
-              Logout
+        
+          {user ? (
+            <Text  style={{ fontSize: 15,opacity:0.7 }}>
+              WHAT DO YOU WANT TO DO ?
+             
             </Text>
-          </TouchableOpacity>
+          ) : null}
+        </View>
+
+        
+        <View
+         style={styles.horizontalView}
+        >
+        
+          <View style={styles.Row}>
+         
         
           <TouchableOpacity
             style={styles.clickButton}
@@ -100,10 +108,18 @@ const Home = ({ navigation }) => {
                 navigation.replace("Customer")
               }
           >
-            <Text style={styles.buttonTextStyle}>
-              To Customer View
-            </Text>
+              <View style={{flex: 4}}>
+              <Image source={require('../assets/customer_view.png')} style={{width: '100%', height: '100%', resizeMode: 'cover'}}/>
+            </View>
+            <View style={{flex: 2}}>
+              <Text style={styles.buttonTextStyle}>
+                To Customer View
+              </Text>
+            </View>
           </TouchableOpacity>
+          <View style={{width:"5%"}}></View>
+
+         
           <TouchableOpacity
             style={styles.clickButton}
             activeOpacity={0.5}
@@ -111,10 +127,19 @@ const Home = ({ navigation }) => {
                 navigation.replace("Driver")
               }
           >
+             <View style={{flex: 4}}>
+              <Image source={require('../assets/driver_view.png')} style={{width: '100%', height: '120%', resizeMode: 'cover'}}/>
+            </View>
+            <View style={{flex: 2}}>
             <Text style={styles.buttonTextStyle}>
               To Driver View
             </Text>
+            </View>
           </TouchableOpacity>
+          </View>
+         
+          <View style={styles.Row}>
+         
           <TouchableOpacity
             style={styles.clickButton}
             activeOpacity={0.5}
@@ -122,30 +147,35 @@ const Home = ({ navigation }) => {
                 navigation.replace("CarMarketplace")
               }
           >
+             <View style={{flex: 4}}>
+              <Image source={require('../assets/car_view.png')} style={{width: '100%', height: '100%', resizeMode: 'cover'}}/>
+            </View>
+            <View style={{flex: 2}}>
             <Text style={styles.buttonTextStyle}>
               To Car View
             </Text>
+            </View>
           </TouchableOpacity>
+          <View style={{width:"5%"}}></View>
+          <TouchableOpacity
+            style={styles.clickButton}
+            activeOpacity={0.5}
+            onPress={logout}
+          >
+             <View style={{flex: 4}}>
+              <Image source={require('../assets/log_out_icon.png')} style={{width: '100%', height: '100%', resizeMode: 'cover'}}/>
+            </View>
+            <View style={{flex: 2}}>
+            <Text style={styles.buttonTextStyle}>
+              Logout
+            </Text>
+            </View>
+          </TouchableOpacity>
+          </View>
         </View>
-        <Text
-          style={{
-            fontSize: 18,
-            textAlign: "center",
-            color: "grey",
-          }}
-        >
-          React Native Firebase Authentication
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            textAlign: "center",
-            color: "grey",
-          }}
-        >
-          www.aboutreact.com
-        </Text>
+        
       </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 };
@@ -153,7 +183,22 @@ const Home = ({ navigation }) => {
 export default Home;
 
 const styles = StyleSheet.create({
-  
+  welcomeWord:{
+    top:70,
+
+  },
+  horizontalView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+   
+  },
+  Row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+   
+  },
   buttonTextStyle: {
     color: "#000",
     paddingVertical: 10,
@@ -162,10 +207,11 @@ const styles = StyleSheet.create({
    
   },
   clickButton: {
+    flexDirection: "column",
     display: 'flex',
     justifyContent: 'center',
-    width: 230,
-    height: 54,
+    width: "40%",
+    height:"70%",
     borderRadius: 20,
     backgroundColor: '#fff',
     shadowColor: '#000',
@@ -176,6 +222,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 4,
     elevation: 8,
+    opacity:0.8,
+   
   }
 
 });

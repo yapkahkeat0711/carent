@@ -91,22 +91,22 @@ function CustomerHomeStack(){
   <Stack.Screen
      name="CustomerHomeMap"
      component={CustomerHomeMap}
-     
+     options={{headerShown: false}}
    ></Stack.Screen>
    <Stack.Screen
      name="CustomerHomeSelectDes"
      component={CustomerHomeSelectDes}
-     
+     options={{headerShown: false}}
    ></Stack.Screen>
    <Stack.Screen
      name="CustomerCheckFee"
      component={CustomerCheckFee}
-     
+     options={{headerShown: false}}
    ></Stack.Screen>
    <Stack.Screen
      name="SendCarRequest"
      component={SendCarRequest}
-     
+     options={{headerShown: false}}
    ></Stack.Screen>
    <Stack.Screen
      name="WaitingPickup"
@@ -199,9 +199,9 @@ function CustomerBottomTab(){
             },
     })}
     >
-            <Tab.Screen name="customerHomeStack" component={CustomerHomeStack}  />
+            <Tab.Screen name="customerHomeStack" component={CustomerHomeStack}    options={{headerShown: false}}/>
           
-            <Tab.Screen name="customerProfile" component={CustomerProfile} />
+            <Tab.Screen name="customerProfile" component={CustomerProfile}   options={{headerShown: false}}/>
         
         </Tab.Navigator>
 
@@ -225,8 +225,8 @@ function DriverBottomTab(){
         },
       })}
     >
-      <Tab.Screen name="driverHomeStack" component={DriverHomeStack}  />
-      <Tab.Screen name="customerProfile" component={CustomerProfile} />
+      <Tab.Screen name="driverHomeStack" component={DriverHomeStack}   options={{headerShown: false}} />
+      <Tab.Screen name="customerProfile" component={CustomerProfile}   options={{headerShown: false}}/>
     </Tab.Navigator>
   );
 }
@@ -264,22 +264,22 @@ export default class App extends Component{
          <Stack.Screen
             name="Splash"
             component={Splash}
-            
+            options={{headerShown: false}}
           ></Stack.Screen>
           <Stack.Screen
             name="Home"
             component={Home}
-            
+            options={{headerShown: false}}
           ></Stack.Screen>
           <Stack.Screen
             name="Login"
             component={Login}
-           
+            options={{headerShown: false}}
           ></Stack.Screen>
          <Stack.Screen
             name="SignUp"
             component={SignUp}
-           
+            options={{headerShown: false}}
           ></Stack.Screen>
           <Stack.Screen
             name="Customer"
