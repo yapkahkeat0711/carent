@@ -20,7 +20,8 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';       
 
 import CustomBtn from '../Components/CustomBtn';
-const CarHome = ({ navigation }) => {
+
+const MyCarHistory = ({ navigation }) => {
  const [listofCar, setlistofCar]= useState();
  
 
@@ -30,7 +31,7 @@ const CarHome = ({ navigation }) => {
       console.log(useremail);
       const snapshot = await firestore()
         .collection("Car_for_rent")
-        .where("email", "!=", useremail)
+        .where("email", "==", useremail)
         .get();
         const fetchedData = snapshot.docs.map((doc) => {
           return { id: doc.id, ...doc.data() };
@@ -71,8 +72,19 @@ const CarHome = ({ navigation }) => {
       <ImageBackground 
     source={require('../assets/backgroundImage.png')} 
     style={{ flex: 1, width: '100%', height: '100%', resizeMode: 'cover' }}>
-      <Text style={{fontSize:36}}>Rent A Car</Text>
-           
+
+
+        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+          <Text>MY CARS</Text>    
+          <CustomBtn
+              btnText="+"
+              btnStyle={{width:50}}
+              onPress={() => navigation.navigate("AddRentCar")}    
+              />
+          </View>
+          
+
+
         <FlatList
         data={listofCar}
         keyExtractor={item => item.id}
@@ -103,7 +115,7 @@ const CarHome = ({ navigation }) => {
   );
 };
 
-export default CarHome;
+export default MyCarHistory;
 
 const styles = StyleSheet.create({
   itemPrice:{

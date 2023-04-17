@@ -104,16 +104,23 @@ const SignUp = ({ navigation }) => {
     source={require('../assets/backgroundImage.png')} 
     style={{ flex: 1, width: '100%', height: '100%', resizeMode: 'cover' }}>
       <ScrollView
-        keyboardShouldPersistTaps="handled"
+         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{
+          flex: 1,
           justifyContent: "center",
           alignContent: "center",
         }}
       >
         <View >
           
-        </View>
+        
         <KeyboardAvoidingView enabled>
+
+        <View style={{ alignItems: "center" }}>
+            <View style={{alignItems: "center",width:200,height:200, justifyContent: "center"}}>
+            <Image source={require('../assets/logo.png')} style={{width: '100%', height: '100%', resizeMode: 'cover'}}/>
+            </View>
+          </View>
           <View style={styles.sectionStyle}>
             <InteractiveTextInput
             onChangeText={(UserName) =>
@@ -172,17 +179,26 @@ const SignUp = ({ navigation }) => {
               {" "}
               {errortext}{" "}
             </Text>
-          ) : null}
+          ) : <View style={{height:"10%"}}></View>}
             <View  style={{ alignItems: 'center'}}>
             <CustomBtn
           btnText="REGISTER"
           onPress={handleSubmitButton}    
           />
+            <Text
+              style={styles.loginTextStyle}
+              onPress={() =>
+                navigation.navigate("Login")
+              }
+            >
+              Have an account ? Login
+            </Text>
             </View>
          
        
-          
+            
         </KeyboardAvoidingView>
+        </View>
       </ScrollView>
       </ImageBackground>
      
@@ -192,6 +208,14 @@ const SignUp = ({ navigation }) => {
 export default SignUp;
 
 const styles = StyleSheet.create({
+  loginTextStyle: {
+    color: "#FFFFFF",
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 14,
+    alignSelf: "center",
+    padding: 10,
+  },
   mainBody: {
     flex: 1,
     justifyContent: "center",

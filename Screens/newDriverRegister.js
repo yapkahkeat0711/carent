@@ -10,6 +10,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  ImageBackground
 } from "react-native";
 
 import auth from "@react-native-firebase/auth";
@@ -20,6 +21,9 @@ const NewDriverRegister = ({ navigation }) => {
   
 
   return (
+    <ImageBackground 
+    source={require('../assets/backgroundImage.png')} 
+    style={{ flex: 1, width: '100%', height: '100%', resizeMode: 'cover' }}>
     <View style={{ alignItems: 'center', justifyContent: 'center',flex:1}}>
        <CustomBtn
           btnText="Become Driver"
@@ -30,11 +34,12 @@ const NewDriverRegister = ({ navigation }) => {
         {'\n'}
       </Text>
         <CustomBtn
-          btnText="Go To Home"
+          btnText="Back To Home"
           onPress={() => navigation.replace('Home')}
           
       />
     </View>
+    </ImageBackground>
   );
 };
 

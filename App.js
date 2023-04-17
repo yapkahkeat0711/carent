@@ -78,6 +78,9 @@ import BecomeDriver from "./Screens/BecomeDriver";
 import DriverPickupPage from "./Screens/DriverPickupPage";
 
 import CarHome from "./Screens/CarHome";
+import AddRentCar from "./Screens/add_rent_car";
+import CarDetail from "./Screens/car_detail";
+import MyCarHistory from "./Screens/MyCarHistory";
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -172,8 +175,48 @@ function CarHomeStack(){
     <Stack.Screen
        name="CarHome"
        component={CarHome}
+       options={{
+        headerShown:false,
+        headerLeft: () => <></>,
+      }}
+     ></Stack.Screen>
+      <Stack.Screen
+       name="CarDetail"
+       component={CarDetail}
+       options={{
+        headerShown:false,
+        headerLeft: () => <></>,
+      }}
      ></Stack.Screen>
      
+     
+
+   
+   </Stack.Navigator>
+    );
+}
+
+
+function MyCarHistoryStack(){
+  return(
+ 
+    <Stack.Navigator initialRouteName={'MyCarHistory'}>
+    <Stack.Screen
+       name="MyCarHistory"
+       component={MyCarHistory}
+       options={{
+        headerShown:false,
+        headerLeft: () => <></>,
+      }}
+     ></Stack.Screen>
+      <Stack.Screen
+       name="AddRentCar"
+       component={AddRentCar}
+       options={{
+        headerShown:false,
+        headerLeft: () => <></>,
+      }}
+     ></Stack.Screen>
      
 
    
@@ -190,9 +233,9 @@ function CustomerBottomTab(){
               let iconName;
     
               if (route.name === 'customerHomeStack') {
-                iconName = focused ? 'home' : 'home-outline';
+                iconName = focused ? 'home-sharp' : 'home-outline';
               } else if (route.name === 'customerProfile') {
-                iconName = focused ? 'person-circle' : 'person-circle-outline';
+                iconName = focused ? 'home-sharp' : 'home-sharp';
               }
     
               return <Ionicons name={iconName} size={size} color={color} />;
@@ -220,7 +263,6 @@ function DriverBottomTab(){
           } else if (route.name === 'customerProfile') {
             iconName = focused ? 'person-circle' : 'person-circle-outline';
           }
-
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       })}
@@ -230,6 +272,8 @@ function DriverBottomTab(){
     </Tab.Navigator>
   );
 }
+
+
 function CarMarketplaceBottomTab(){
   return (
     <Tab.Navigator initialRouteName={'CarHomeStack'} 
@@ -241,6 +285,8 @@ function CarMarketplaceBottomTab(){
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'customerProfile') {
             iconName = focused ? 'person-circle' : 'person-circle-outline';
+          }else if (route.name === 'carHistory') {
+            iconName = focused ? 'person-circle' : 'person-circle-outline';
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -248,6 +294,7 @@ function CarMarketplaceBottomTab(){
       })}
     >
       <Tab.Screen name="CarHomeStack" component={CarHomeStack}  />
+      <Tab.Screen name="myCarHistoryStack" component={MyCarHistoryStack}  />
       <Tab.Screen name="customerProfile" component={CustomerProfile} />
     </Tab.Navigator>
   );

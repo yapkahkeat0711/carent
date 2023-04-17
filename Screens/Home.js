@@ -163,7 +163,7 @@ const Home = ({ navigation }) => {
             onPress={logout}
           >
              <View style={{flex: 4}}>
-              <Image source={require('../assets/log_out_icon.png')} style={{width: '100%', height: '100%', resizeMode: 'cover'}}/>
+              <Image source={require('../assets/logout.png')} style={{width: '100%', height: '100%', resizeMode: 'cover'}}/>
             </View>
             <View style={{flex: 2}}>
             <Text style={styles.buttonTextStyle}>

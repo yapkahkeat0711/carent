@@ -10,9 +10,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  ImageBackground
 } from "react-native";
 
 import auth from "@react-native-firebase/auth";
+import CustomBtn from "../Components/CustomBtn";
 
 const CustomerProfile = ({ navigation }) => {
   const [user, setUser] = useState();
@@ -58,6 +60,9 @@ const CustomerProfile = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+       <ImageBackground 
+    source={require('../assets/backgroundImage.png')} 
+    style={{ flex: 1, width: '100%', height: '100%', resizeMode: 'cover' }}>
       <View style={{ flex: 1, padding: 16 }}>
         <View
           style={{
@@ -66,15 +71,7 @@ const CustomerProfile = ({ navigation }) => {
             justifyContent: "center",
           }}
         >
-          <Text
-            style={{
-              fontSize: 20,
-              textAlign: "center",
-              marginBottom: 16,
-            }}
-          >
-            Firebase Auth
-          </Text>
+         
           {user ? (
             <Text>
               Welcome{" "}
@@ -83,46 +80,28 @@ const CustomerProfile = ({ navigation }) => {
                 : user.email}
             </Text>
           ) : null}
-          <TouchableOpacity
-            style={styles.buttonStyle}
-            activeOpacity={0.5}
+           <CustomBtn
+            btnText="Logout"
             onPress={logout}
-          >
-            <Text style={styles.buttonTextStyle}>
-              Logout
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.buttonStyle}
-            activeOpacity={0.5}
+            
+            
+        />
+        <Text>
+        {'\n'}
+      </Text>
+         <CustomBtn
+            btnText="Back To Home"
             onPress={() =>
-                navigation.navigate("Home")
-              }
-          >
-            <Text style={styles.buttonTextStyle}>
-              To Home View
-            </Text>
-          </TouchableOpacity>
+              navigation.navigate("Home")
+            }
+            
+            
+        />
         </View>
-        <Text
-          style={{
-            fontSize: 18,
-            textAlign: "center",
-            color: "grey",
-          }}
-        >
-          React Native Firebase Authentication
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            textAlign: "center",
-            color: "grey",
-          }}
-        >
-          www.aboutreact.com
-        </Text>
+       
+      
       </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 };

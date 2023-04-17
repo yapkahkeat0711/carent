@@ -10,6 +10,7 @@ import {
   View,
   StyleSheet,
   Image,
+  ImageBackground
 } from "react-native";
 import auth from "@react-native-firebase/auth";
 
@@ -33,15 +34,11 @@ const SplashScreen = ({ navigation }) => {
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#307ecc" }}
     >
+        <ImageBackground 
+    source={require('../assets/backgroundImage.png')} 
+    style={{ flex: 1, width: '100%', height: '100%', resizeMode: 'cover' }}>
       <View style={styles.container}>
-        {/* <Image
-          source={require("../Image/aboutreact.png")}
-          style={{
-            width: "90%",
-            resizeMode: "contain",
-            margin: 30,
-          }}
-        /> */}
+       
         <ActivityIndicator
           animating={animating}
           color="#FFFFFF"
@@ -49,24 +46,8 @@ const SplashScreen = ({ navigation }) => {
           style={styles.activityIndicator}
         />
       </View>
-      <Text
-        style={{
-          fontSize: 18,
-          textAlign: "center",
-          color: "white",
-        }}
-      >
-        React Native Firebase Authentication
-      </Text>
-      <Text
-        style={{
-          fontSize: 16,
-          textAlign: "center",
-          color: "white",
-        }}
-      >
-        www.aboutreact.com
-      </Text>
+    
+      </ImageBackground>
     </SafeAreaView>
   );
 };

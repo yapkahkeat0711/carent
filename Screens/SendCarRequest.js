@@ -9,14 +9,16 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
+  Image
 } from "react-native";
 
 
 import database from '@react-native-firebase/database';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';       
-      
+
+
 const SendCarRequest = ({ route,navigation }) => {
     const ridesRef = database().ref('rides');
     const {customerPosition,destination,fee}= route.params;
@@ -123,6 +125,7 @@ const SendCarRequest = ({ route,navigation }) => {
       }
     return (
         <View style={styles.container}>
+        
           <Text style={{textAlign:'center',fontSize:30}}>Finding Driver ...</Text>
             <ActivityIndicator size="large"/>
             

@@ -23,12 +23,13 @@ import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import uuid from 'react-native-uuid';
 
-const BecomeDriver = ({ navigation }) => {
+const AddRentCar = ({ navigation }) => {
   const [imageuri,setimageuri]=useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [car_brand, setCarBrand] = useState(null);
   const [car_color, setCarColor] = useState(null);
   const [car_plate_number, setCarPlate] = useState(null);
+  const [price, setPrice] = useState(null);
   const handleSelectImage = async() => {
     try {
         const granted = await PermissionsAndroid.request(
@@ -63,6 +64,13 @@ const BecomeDriver = ({ navigation }) => {
       }
     
   };
+
+  const handleNumberChange = (value) => {
+    // Use regular expression to remove non-numeric characters
+    const formattedValue = value.replace(/[^0-9]/g, '');
+    setPrice(formattedValue);
+  };
+
   const uploadImage = async uri => {
     
     try {
@@ -97,19 +105,21 @@ const BecomeDriver = ({ navigation }) => {
     if (!car_brand) return alert("Please fill Car Brand");
     if (!car_color) return alert("Please fill Car Plate Number");
     if (!car_plate_number) return alert("Please fill Car Color");
+    if (!price) return alert("Please fill Price");
     if (!selectedImage) return alert("Please insert Image");
     const currentUser = auth().currentUser;
-    const querySnapshot = await firestore().collection('Car_of_driver').where('email', '==', currentUser.email).get();
+  
     const storageurl = await uploadImage(imageuri);
     const newData = { photoURL:storageurl ,
         car_brand:car_brand,
         car_plate_number:car_plate_number,
         car_color:car_color,
+        price:price,
         email:auth().currentUser.email };
     
-    if (querySnapshot.empty) {
+   
         //add new data in car of driver
-        const snapshot = await firestore().collection('Car_of_driver').add(newData)
+        const snapshot = await firestore().collection('Car_for_rent').add(newData)
         .then((docRef) => {
             console.log('Document written with ID: ', docRef.id);
           })
@@ -117,23 +127,20 @@ const BecomeDriver = ({ navigation }) => {
             console.error('Error adding document: ', error);
           });
 
-          //update isDriver to 1
-          const userRef = firestore().collection("User").where('email', '==', currentUser.email);
-          const userSnapshot = await userRef.get();
-          const userDoc = userSnapshot.docs[0];
-          await userDoc.ref.update({
-            isDriver: 1,
-          });
-    } 
-    alert('Regiter Succesfully');
-    navigation.replace("DriverPage");
+        
+ 
+    alert('Added Succesfully');
+    navigation.replace("MyCarHistory");
     
   }
   return (
-    <View style={{ flex:1}}>
-       <ImageBackground 
+    <SafeAreaView
+    style={styles.mainBody}
+  >
+    <ImageBackground 
     source={require('../assets/backgroundImage.png')} 
     style={{ flex: 1, width: '100%', height: '100%', resizeMode: 'cover' }}>
+    <View style={{ flex:1}}>
    <View style={{ flex:0.5,alignItems: 'center'}}>
    {selectedImage && (
         <View>
@@ -155,9 +162,11 @@ const BecomeDriver = ({ navigation }) => {
         />
        
       )}
+     
+     
       
     </View>
-    <View style={{ flex:0.4}}>
+    <View style={{ flex:0.5}}>
     <Text>
         Car Brand
     </Text>
@@ -177,7 +186,7 @@ const BecomeDriver = ({ navigation }) => {
             setCarPlate(text);
           }}
         value={car_plate_number}
-        placeholder="Enter car brand here..."
+        placeholder="Enter car plate number here..."
       />
       <View style={{ borderBottomWidth: 0.8, borderBottomColor: 'gray' }} />
       <Text>
@@ -188,9 +197,20 @@ const BecomeDriver = ({ navigation }) => {
             setCarColor(text);
           }}
         value={car_color}
-        placeholder="Enter car brand here..."
+        placeholder="Enter car color here..."
       />
       <View style={{ borderBottomWidth: 0.8, borderBottomColor: 'gray' }} />
+      <Text>
+        Price Per Day
+    </Text>
+    <TextInput
+        keyboardType="numeric"
+        value={price}
+        onChangeText={handleNumberChange}
+        placeholder="Enter price here..."
+      />
+      <View style={{ borderBottomWidth: 0.8, borderBottomColor: 'gray' }} />
+      
     </View>
     <View style={{ alignItems: 'center', flex:0.1}}>
     <CustomBtn
@@ -199,14 +219,20 @@ const BecomeDriver = ({ navigation }) => {
           
       />
     </View>
-    </ImageBackground>
   </View>
+  </ImageBackground>
+</SafeAreaView>
   );
 };
 
-export default BecomeDriver;
+export default AddRentCar;
 
 const styles = StyleSheet.create({
+  mainBody: {
+    flex: 1,
+    justifyContent: "center",
+    alignContent: "center",
+  },
   buttonStyle: {
     minWidth: 300,
     backgroundColor: "#7DE24E",

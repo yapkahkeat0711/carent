@@ -71,11 +71,14 @@ const Login = ({ navigation }) => {
           alignContent: "center",
         }}
       >
-        <View>
-          <KeyboardAvoidingView enabled>
-            <View style={{ alignItems: "center" }}>
-             
+        <View >
+          <KeyboardAvoidingView enabled >
+          <View style={{ alignItems: "center" }}>
+            <View style={{alignItems: "center",width:200,height:200, justifyContent: "center"}}>
+            <Image source={require('../assets/logo.png')} style={{width: '100%', height: '100%', resizeMode: 'cover'}}/>
             </View>
+          </View>
+
             <View style={styles.sectionStyle}>
             <InteractiveTextInput
             onChangeText={(UserEmail) =>
@@ -119,10 +122,10 @@ const Login = ({ navigation }) => {
             ) :  <View style={{height:"10%"}}></View>}
               
              <View  style={{ alignItems: 'center'}}>
-             <CustomBtn
-          btnText="LOGIN"
-          onPress={handleSubmitPress}    
-          />
+                <CustomBtn
+              btnText="LOGIN"
+              onPress={handleSubmitPress}    
+              />
 
              </View>
              
