@@ -5,6 +5,7 @@ import { View, Text, StyleSheet,TouchableOpacity } from 'react-native';
 const CustomBtn = ({
     onPress = () => {},
     btnStyle = {},
+    btnTextStyle={},
     btnText
 }) => {
     return (
@@ -12,7 +13,7 @@ const CustomBtn = ({
      onPress={onPress}
      style={{...styles.btnStyle,...btnStyle}}
      >
-         <Text  style={{...styles.buttonTextStyle}}>{btnText}</Text>
+         <Text  style={{...styles.buttonTextStyle,...btnTextStyle}}>{btnText}</Text>
      </TouchableOpacity>
     );
 };

@@ -20,7 +20,7 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';       
 
 import CustomBtn from '../Components/CustomBtn';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 const MyCarHistory = ({ navigation }) => {
  const [listofCar, setlistofCar]= useState();
  
@@ -75,12 +75,15 @@ const MyCarHistory = ({ navigation }) => {
 
 
         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-          <Text>MY CARS</Text>    
-          <CustomBtn
-              btnText="+"
-              btnStyle={{width:50}}
-              onPress={() => navigation.navigate("AddRentCar")}    
-              />
+          <Text style={{fontWeight:'bold',fontSize:36}}>MY CARS</Text>    
+            <TouchableOpacity  onPress={() => navigation.navigate("AddRentCar")}>
+            <Ionicons 
+                    name="md-add-circle-outline"
+                    size={70}
+                    
+                />
+            </TouchableOpacity>
+              
           </View>
           
 
@@ -97,7 +100,7 @@ const MyCarHistory = ({ navigation }) => {
               }>
                 <Image  
                 style={{width:'80%',height:250,margin:5,zIndex:1}}
-                source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/carent-e9bfe.appspot.com/o/images%2F25414490-d258-42e1-98b1-d176068a20c1?alt=media&token=6cd2e732-22e1-4d4c-a264-0bfc4abf9444' }}
+                source={{ uri: car.photoURL }}
               />
               
                     <Text>{car.car_brand}</Text>

@@ -235,7 +235,7 @@ function CustomerBottomTab(){
               if (route.name === 'customerHomeStack') {
                 iconName = focused ? 'home-sharp' : 'home-outline';
               } else if (route.name === 'customerProfile') {
-                iconName = focused ? 'home-sharp' : 'home-sharp';
+                iconName = focused ? 'person-circle' : 'person-circle-outline';
               }
     
               return <Ionicons name={iconName} size={size} color={color} />;
@@ -285,8 +285,8 @@ function CarMarketplaceBottomTab(){
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'customerProfile') {
             iconName = focused ? 'person-circle' : 'person-circle-outline';
-          }else if (route.name === 'carHistory') {
-            iconName = focused ? 'person-circle' : 'person-circle-outline';
+          }else if (route.name === 'myCarHistoryStack') {
+            iconName = focused ? 'car-sport-sharp' : 'car-sport-outline';
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
