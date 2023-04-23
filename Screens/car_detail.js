@@ -122,6 +122,8 @@ const CarDetail = ({ route,navigation }) => {
         .add(data)
         .then((docRef) => {
           console.log('Document written with ID: ', docRef.id);
+          alert("Booking successfully made");
+          navigation.navigate('ShowRentedCar');
         })
         .catch((error) => {
           console.error('Error adding document: ', error);
@@ -173,7 +175,7 @@ const CarDetail = ({ route,navigation }) => {
             <View style={{alignContent:'center',alignItems:'center'}}>
             <Image  
                 style={{width:'80%',height:250,margin:5,zIndex:1,}}
-                source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/carent-e9bfe.appspot.com/o/images%2F25414490-d258-42e1-98b1-d176068a20c1?alt=media&token=6cd2e732-22e1-4d4c-a264-0bfc4abf9444' }}
+                source={{ uri: car.photoURL }}
               />
             </View>
            

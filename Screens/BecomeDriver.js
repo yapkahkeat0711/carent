@@ -29,6 +29,8 @@ const BecomeDriver = ({ navigation }) => {
   const [car_brand, setCarBrand] = useState(null);
   const [car_color, setCarColor] = useState(null);
   const [car_plate_number, setCarPlate] = useState(null);
+
+  
   const handleSelectImage = async() => {
     try {
         const granted = await PermissionsAndroid.request(

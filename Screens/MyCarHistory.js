@@ -95,9 +95,8 @@ const MyCarHistory = ({ navigation }) => {
         <View  style={{flex:1,alignContent:'center',alignItems:'center',paddingBottom:40}}>
           
            
-            <TouchableOpacity style={{flex:1,alignContent:'center',alignItems:'center',backgroundColor:'white',width:'80%',borderRadius:10}}  onPress={() =>
-                navigation.navigate("CarDetail",{car_id:car.id})
-              }>
+            <TouchableOpacity onPress={() => navigation.navigate('EditRentCar',{car_id:car.id})} style={{flex:1,alignContent:'center',alignItems:'center',backgroundColor:'white',width:'80%',borderRadius:10}}  
+              >
                 <Image  
                 style={{width:'80%',height:250,margin:5,zIndex:1}}
                 source={{ uri: car.photoURL }}

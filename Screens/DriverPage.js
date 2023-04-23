@@ -22,7 +22,8 @@ import auth from '@react-native-firebase/auth';
 import Modal from "react-native-modal";
 import Geocoder from 'react-native-geocoding';
 import flatted from 'flatted';
-
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 async function requestLocationPermission() {
   try {
       const granted = await PermissionsAndroid.request(
@@ -91,6 +92,7 @@ const DriverPage = ({ navigation }) => {
   }
     
   };
+
   const readLocation=()=> {
     Geolocation.getCurrentPosition(
         (position) => { 
@@ -300,20 +302,34 @@ const DriverPage = ({ navigation }) => {
           }}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalText}>New Request!</Text>
-              <Text style={styles.modalText}>From:{newChildData.pickupname.streetAddress}</Text>
-              <Text style={styles.modalText}>To:{newChildData.dropoffname.streetAddress}</Text>
-              <Text style={styles.modalText}>RM {newChildData.data.fee}</Text>
+            {/* city: null,
+      state: null,
+      country: null,
+      streetAddress:null,
+      postalCode:null, */}
+              <Text style={styles.modalHeaderText}>New Request! {'\n'}</Text>
+           
+              <Text style={styles.modalText}>From:  {newChildData.pickupname.streetAddress}, {newChildData.pickupname.postalCode}, {newChildData.pickupname.city}, {newChildData.pickupname.state}, {newChildData.pickupname.country}</Text>
+              
+              <MaterialIcons name='my-location' size={20}/>
+              <MaterialCommunityIcons name='dots-vertical'/>
+              <MaterialCommunityIcons name='dots-vertical'/>
+              <MaterialCommunityIcons name='dots-vertical' />
+              <MaterialIcons name='location-pin' size={20} style={{marginBottom: 15}}/>
+
+              <Text style={styles.modalText}>To:    {newChildData.dropoffname.streetAddress}, {newChildData.dropoffname.postalCode}, {newChildData.dropoffname.city}, {newChildData.dropoffname.state}, {newChildData.dropoffname.country}</Text>
+              <Text style={{fontSize:30}}>RM {newChildData.data.fee}</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Button
                   title="Accept"
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => {
                     accepteRequest(Newsnapshot);
-                    const serializedSnapshot = flatted.stringify(Newsnapshot);
-                    navigation.replace('DriverPickupPage',{newChildData:newChildData,Newsnapshot:Newsnapshot});
+                    // const serializedSnapshot = flatted.stringify(Newsnapshot);
+                    navigation.replace('DriverPickupPage',{newChildData:newChildData,Newsnapshotkey:Newsnapshot.key});
                   }}
                 />
+                <Text>{'\n'}</Text>
                 <Button
                   title="Decline"
                   style={[styles.button, styles.buttonClose]}
@@ -362,6 +378,16 @@ const DriverPage = ({ navigation }) => {
 
 export default DriverPage;
 const styles = StyleSheet.create({
+  lineStyle:{
+    backgroundColor: '#A2A2A2',
+    height: 2,
+    width:350,
+    marginBottom:5,
+    marginTop:5,
+},
+  modalHeaderText:{
+    fontSize:36
+  },
   container: {
     flex:1,
    
@@ -398,6 +424,7 @@ modalView: {
   backgroundColor: 'white',
   borderRadius: 20,
   padding: 50,
+  paddingTop:25,
   alignItems: 'center',
   shadowColor: '#000',
   shadowOffset: {
@@ -425,7 +452,7 @@ textStyle: {
   textAlign: 'center',
 },
 modalText: {
-  marginBottom: 15,
+  marginBottom: 20,
   textAlign: 'center',
 },
 buttonStyle: {

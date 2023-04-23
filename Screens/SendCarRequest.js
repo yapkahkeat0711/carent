@@ -22,7 +22,7 @@ import auth from '@react-native-firebase/auth';
 const SendCarRequest = ({ route,navigation }) => {
     const ridesRef = database().ref('rides');
     const {customerPosition,destination,fee}= route.params;
-   
+    const [requestKey,setRequestKey]= useState();
     
     
     useEffect(() => {
@@ -87,7 +87,10 @@ const SendCarRequest = ({ route,navigation }) => {
           status: 'requested',
           fee:fee,
         });
-        console.log('Request created');
+        // const rideKey = newRideRef.key;
+        // setRequestKey(rideKey);
+       
+        // console.log('Request created',rideKey);
 
         return new Promise((resolve, reject) => {
             // Set a timeout of 20 seconds
@@ -110,10 +113,12 @@ const SendCarRequest = ({ route,navigation }) => {
               if (ride.status === "accepted") {
                 // The ride request has been accepted by a driver
                 console.log("Ride accepted:", ride);
+                console.log("Ride accepted:", newRideRef.key);
                 // Clear the timeout and resolve the promise with the new ride reference
                 clearTimeout(timeout);
                 newRideRef.off("value");
-                navigation.replace('WaitingPickup',{snapshot:snapshot});
+                navigation.replace('WaitingPickup',{requestkey:newRideRef.key});
+               
               } else {
                 // Ride has not been accepted yet
               }

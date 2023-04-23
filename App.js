@@ -76,12 +76,14 @@ import NewDriverRegister from "./Screens/newDriverRegister";
 import DriverPage from "./Screens/DriverPage";
 import BecomeDriver from "./Screens/BecomeDriver";
 import DriverPickupPage from "./Screens/DriverPickupPage";
+import DriverEditCar from "./Screens/DriverEditCar";
+import EditRentCar from "./Screens/EditRentCar";
 
 import CarHome from "./Screens/CarHome";
 import AddRentCar from "./Screens/add_rent_car";
 import CarDetail from "./Screens/car_detail";
 import MyCarHistory from "./Screens/MyCarHistory";
-
+import ShowRentedCar from "./Screens/showRentedCar";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Stack = createStackNavigator ();
@@ -217,6 +219,14 @@ function MyCarHistoryStack(){
         headerLeft: () => <></>,
       }}
      ></Stack.Screen>
+      <Stack.Screen
+       name="EditRentCar"
+       component={EditRentCar}
+       options={{
+        headerShown:false,
+        headerLeft: () => <></>,
+      }}
+     ></Stack.Screen>
      
 
    
@@ -224,6 +234,33 @@ function MyCarHistoryStack(){
     );
 }
 
+function CustomerProfileStack(){
+  return(
+ 
+    <Stack.Navigator initialRouteName={'CustomerProfile'}>
+    <Stack.Screen
+       name="CustomerProfile"
+       component={CustomerProfile}
+       options={{
+        headerShown:false,
+        headerLeft: () => <></>,
+      }}
+     ></Stack.Screen>
+      <Stack.Screen
+       name="DriverEditCar"
+       component={DriverEditCar}
+       options={{
+        headerShown:false,
+        headerLeft: () => <></>,
+      }}
+     ></Stack.Screen>
+     
+     
+
+   
+   </Stack.Navigator>
+    );
+}
 function CustomerBottomTab(){
   return(
  
@@ -234,7 +271,7 @@ function CustomerBottomTab(){
     
               if (route.name === 'customerHomeStack') {
                 iconName = focused ? 'home-sharp' : 'home-outline';
-              } else if (route.name === 'customerProfile') {
+              } else if (route.name === 'CustomerProfileStack') {
                 iconName = focused ? 'person-circle' : 'person-circle-outline';
               }
     
@@ -244,23 +281,26 @@ function CustomerBottomTab(){
     >
             <Tab.Screen name="customerHomeStack" component={CustomerHomeStack}    options={{headerShown: false}}/>
           
-            <Tab.Screen name="customerProfile" component={CustomerProfile}   options={{headerShown: false}}/>
+            <Tab.Screen name="CustomerProfileStack" component={CustomerProfileStack}   options={{headerShown: false}}/>
         
         </Tab.Navigator>
 
       
   );
 }
+
+
 function DriverBottomTab(){
   return (
     <Tab.Navigator initialRouteName={'driverHomeStack'} 
+   
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused,color, size }) => {
           let iconName;
 
           if (route.name === 'driverHomeStack') {
             iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'customerProfile') {
+          } else if (route.name === 'CustomerProfileStack') {
             iconName = focused ? 'person-circle' : 'person-circle-outline';
           }
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -268,7 +308,7 @@ function DriverBottomTab(){
       })}
     >
       <Tab.Screen name="driverHomeStack" component={DriverHomeStack}   options={{headerShown: false}} />
-      <Tab.Screen name="customerProfile" component={CustomerProfile}   options={{headerShown: false}}/>
+      <Tab.Screen name="CustomerProfileStack" component={CustomerProfileStack}   options={{headerShown: false}}/>
     </Tab.Navigator>
   );
 }
@@ -283,9 +323,11 @@ function CarMarketplaceBottomTab(){
 
           if (route.name === 'CarHomeStack') {
             iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'customerProfile') {
+          } else if (route.name === 'CustomerProfileStack') {
             iconName = focused ? 'person-circle' : 'person-circle-outline';
           }else if (route.name === 'myCarHistoryStack') {
+            iconName = focused ? 'car-sport-sharp' : 'car-sport-outline';
+          }else if (route.name === 'ShowRentedCar') {
             iconName = focused ? 'car-sport-sharp' : 'car-sport-outline';
           }
 
@@ -293,9 +335,10 @@ function CarMarketplaceBottomTab(){
         },
       })}
     >
-      <Tab.Screen name="CarHomeStack" component={CarHomeStack}  />
-      <Tab.Screen name="myCarHistoryStack" component={MyCarHistoryStack}  />
-      <Tab.Screen name="customerProfile" component={CustomerProfile} />
+      <Tab.Screen name="CarHomeStack" component={CarHomeStack} options={{headerShown: false}} />
+      <Tab.Screen name="myCarHistoryStack" component={MyCarHistoryStack}  options={{headerShown: false}}/>
+      <Tab.Screen name="ShowRentedCar" component={ShowRentedCar}  options={{headerShown: false}}/>
+      <Tab.Screen name="CustomerProfileStack" component={CustomerProfileStack} options={{headerShown: false}}/>
     </Tab.Navigator>
   );
 }

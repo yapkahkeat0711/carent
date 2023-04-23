@@ -90,6 +90,13 @@ const CustomerHome = ({ navigation }) => {
     PermissionsAndroid.RESULTS.DENIED
   );
 
+   const readlivelocation = async () => {
+    const locPermission = await requestLocationPermission();
+    if(locPermission){
+      readLocation();
+    }
+  };
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       // Show the bottom tab bar when the screen comes into focus
@@ -98,20 +105,22 @@ const CustomerHome = ({ navigation }) => {
 
     const subscribe = navigation.addListener('blur', () => {
       // Hide the bottom tab bar when the screen loses focus
+       
       navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
+      clearInterval(interval);
     });
     
    
-    setGranted(requestLocationPermission());
-    if(granted){
-      readLocation();
-    }
+    const interval = setInterval(() => {
+      readlivelocation();
+      }, 5000);
      // Cleanup the listeners when the component unmounts
      return () => {
+      clearInterval(interval);
       unsubscribe();
       subscribe();
     };
-  }, [navigation])
+  }, [navigation]);
 
 
 
