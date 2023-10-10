@@ -68,7 +68,7 @@ const CustomerCheckFee = ({ route,navigation }) => {
                  <MapViewDirections
                     origin={customerPosition}
                     destination={destination}
-                    apikey={'AIzaSyBS0SHCUgOxAQ5gqVUSTtug_5AdQDloy4A'}
+                    apikey={[API Key]}
                     strokeWidth={6}
                     strokeColor="red"
                     optimizeWaypoints={true}
